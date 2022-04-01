@@ -35,6 +35,9 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+import pagination from '@/mixins/pagination'
+Vue.mixin(pagination)
+
 new Vue({
   el: '#app',
   router,

@@ -54,7 +54,6 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
-
   {
     path: '/example',
     component: Layout,
@@ -76,7 +75,54 @@ export const constantRoutes = [
       // }
     ]
   },
-
+  {
+    path: '/user-manage',
+    component: Layout,
+    children: [
+      {
+        path: '/user-manage',
+        name: 'UserManage',
+        component: () => import('@/views/UserManage'),
+        meta: { title: '用户管理', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/class-manage',
+    component: Layout,
+    children: [
+      {
+        path: '/class-manage',
+        name: 'ClassManage',
+        component: () => import('@/views/ClassManage'),
+        meta: { title: '班级管理', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/course-manage',
+    component: Layout,
+    children: [
+      {
+        path: '/course-manage',
+        name: 'CourseManage',
+        component: () => import('@/views/CourseManage'),
+        meta: { title: '课程管理', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/student-manage',
+    component: Layout,
+    children: [
+      {
+        path: '/student-manage',
+        name: 'StudentManage',
+        component: () => import('@/views/StudentManage'),
+        meta: { title: '学生管理', icon: 'form' }
+      }
+    ]
+  },
   {
     path: '/form',
     component: Layout,
