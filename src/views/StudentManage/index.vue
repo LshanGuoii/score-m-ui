@@ -1,9 +1,16 @@
 <template>
   <div class="app-container user-message">
     <div>
-      <div></div>
+      <el-button
+        type="text"
+        @click="handleClick()"
+      >Dialog</el-button>
+      <StudentFrom
+        v-model="showDialog"
+        :data="studentMessage"
+      />
       <div class="header-search">
-        <div class="left">{{ searchFilterText }}</div>
+        <div class="left">111</div>
         <div class="right">
           <el-input
             v-model="key"
@@ -11,7 +18,11 @@
             placeholder="请输入学号"
             style="width: 340px"
           >
-            <el-button slot="append" icon="el-icon-search" @click="getList()" />
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="getList()"
+            />
           </el-input>
         </div>
       </div>
@@ -22,21 +33,59 @@
       style="width: 100%"
       :default-sort="{ prop: 'date', order: 'descending' }"
     >
-      <el-table-column prop="date" label="学号" sortable />
-      <el-table-column prop="name" label="姓名" sortable />
-      <el-table-column prop="address" label="性别" />
-      <el-table-column prop="address" label="身份证号" />
-      <el-table-column prop="address" label="电话" />
-      <el-table-column prop="address" width="180" label="家庭住址" />
-      <el-table-column prop="address" label="入学时间" />
-      <el-table-column prop="address" label="入学年月日" />
-      <el-table-column prop="address" label="创建时间 " />
-      <el-table-column fixed="right" label="操作" width="100">
+      <el-table-column
+        prop="date"
+        label="学号"
+        sortable
+      />
+      <el-table-column
+        prop="name"
+        label="姓名"
+        sortable
+      />
+      <el-table-column
+        prop="address"
+        label="性别"
+      />
+
+      <el-table-column
+        prop="address"
+        label="电话"
+      />
+
+      <el-table-column
+        prop="address"
+        label="入学时间"
+      />
+      <el-table-column
+        prop="address"
+        label="院系"
+      />
+      <el-table-column
+        prop="address"
+        label="创建时间 "
+      />
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="100"
+      >
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small"
-            >查看</el-button
-          >
-          <el-button type="text" size="small">编辑</el-button>
+          <!-- <el-button
+            @click="handleClick(scope.row,'view')"
+            type="text"
+            size="small"
+          >查看</el-button> -->
+          <el-button
+            type="text"
+            size="small"
+            @click="handleClick(scope.row)"
+          >编辑</el-button>
+          <el-button
+            type="text"
+            size="small"
+            @click="delClick(scope.row)"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -53,12 +102,15 @@
 </template>
 
 <script>
+import StudentFrom from "./StudentFrom.vue";
 export default {
-  name: "UserManage",
+  name: "StudentManage",
 
-  components: {},
+  components: { StudentFrom },
   data() {
     return {
+      showDialog: false,
+      studentMessage: {},
       tableData: [
         {
           date: "2016-05-02",
@@ -80,14 +132,25 @@ export default {
           name: "王小虎",
           address: "上海市普陀区金沙江路 1516 弄",
         },
-      ],
-    };
+      ]
+    }
   },
   computed: {},
-  created() {},
-  mounted() {},
-  methods: {},
-};
+  created() { },
+  mounted() { },
+  methods: {
+    handleClick(item) {
+      console.log('[ item ]-143', item);
+      this.studentMessage = item || {}
+      console.log('[ this.studentMessage ]-145', this.studentMessage);
+      this.showDialog = true
+      console.log('[ this.showDialog ]-147', this.showDialog);
+    },
+    delClick() {
+
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .user-message {

@@ -3,6 +3,8 @@
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar class="sidebar-container" />
     <div class="main-container">
+      <!-- <div class="head-content">平时成绩管理系统</div> -->
+
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
       </div>
@@ -89,5 +91,9 @@ export default {
 
   .mobile .fixed-header {
     width: 100%;
+  }
+  .head-content {
+    font-size: 28px;
+    height: 50px;
   }
 </style>
