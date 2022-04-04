@@ -99,18 +99,7 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/course-manage',
-    component: Layout,
-    children: [
-      {
-        path: '/course-manage',
-        name: 'CourseManage',
-        component: () => import('@/views/CourseManage'),
-        meta: { title: '课程管理', icon: 'form' }
-      }
-    ]
-  },
+
   {
     path: '/student-manage',
     component: Layout,
@@ -123,7 +112,32 @@ export const constantRoutes = [
       }
     ]
   },
-
+  {
+    path: '/student',
+    redirect: 'dep-manage',
+    meta: { title: '配置管理', icon: 'form' },
+    component: Layout,
+    children: [
+      {
+        path: '/dep-manage',
+        name: 'DepManage',
+        component: () => import('@/views/DepManage'),
+        meta: { title: '系部', icon: 'form' }
+      },
+      {
+        path: '/specialize-manage',
+        name: 'SpecializeManage',
+        component: () => import('@/views/SpecializeManage'),
+        meta: { title: '专业', icon: 'form' }
+      },
+      {
+        path: '/class-manage',
+        name: 'ClassManage',
+        component: () => import('@/views/ClassManage'),
+        meta: { title: '班级', icon: 'form' }
+      }
+    ]
+  },
   {
     path: '/nested',
     component: Layout,

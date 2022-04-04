@@ -7,6 +7,8 @@ function resolve(dir) {
 }
 
 const name = defaultSettings.title || 'vue Admin Template' // page title
+const proxyBaseUrl = 'http://izx9j3im.dnat.tech:34420'
+// const proxyBaseUrl = 'http://192.168.0.102'
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -36,7 +38,13 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    proxy: {
+      '/*': {
+        target: proxyBaseUrl,
+        changeOrigin: true
+      },
+    }
+    // before: require('./mock/mock-server.js')
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
@@ -87,7 +95,7 @@ module.exports = {
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
+              // `runtime` must same as runtimeChunk name. default is `runtime`
               inline: /runtime\..*\.js$/
             }])
             .end()

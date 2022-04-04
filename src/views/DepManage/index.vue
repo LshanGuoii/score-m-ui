@@ -1,44 +1,15 @@
 <template>
   <div class="app-container user-message">
     <div>
-      <From v-if="showDialog" v-model="showDialog" :fromData="fromProps" />
+      <From v-if="showDialog" v-model="showDialog" :fromData="studentMessage" />
       <div class="header-search">
         <div class="left">
           <el-form inline style="width: 100%">
-            <el-form-item label="系部选择">
-              <el-select
-                v-model="tableFilter.departmentId"
-                placeholder="请选择系部"
-                clearable
-                @change="selectDepChange"
-              >
-                <el-option
-                  v-for="(item, index) in depList"
-                  :key="index"
-                  :label="item.departmentName"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="专业选择">
-              <el-select
-                v-model="tableFilter.specializeId"
-                placeholder="请选择专业"
-                clearable
-              >
-                <el-option
-                  v-for="(item, index) in speList"
-                  :key="index"
-                  :label="item.specializeName"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
             <el-form-item>
               <el-input
-                v-model="tableFilter.search"
+                v-model="search"
                 clearable
-                placeholder="请输入班级名"
+                placeholder="请输入系部名"
                 style="width: 340px"
                 @change="getList()"
               >
@@ -51,8 +22,8 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="handleClick()"
-                >新增班级
-              </el-button>
+                >新增系部</el-button
+              >
             </el-form-item>
             <el-form-item>
               <el-button type="danger" @click="delClick(selectIds)"
@@ -64,7 +35,7 @@
       </div>
     </div>
     <el-table
-      :data="classList"
+      :data="tableData"
       border
       style="width: 100%"
       :default-sort="{ prop: 'date', order: 'descending' }"
@@ -72,9 +43,7 @@
     >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column type="index" label="序号" width="50"> </el-table-column>
-      <el-table-column prop="departmentName" label="系部名称" sortable />
-      <el-table-column prop="specializeName" label="专业名称" sortable />
-      <el-table-column prop="className" label="班级名称" sortable />
+      <el-table-column prop="departmentName" label="学院名称" sortable />
       <el-table-column prop="createTime" width="200" label="创建时间 " />
       <el-table-column prop="updateTime" width="200" label="更新时间 " />
 
@@ -112,51 +81,45 @@
 
 <script>
 import From from "./From.vue";
-import * as api from "@/api/config";
-import classMixin from "@/mixins/classTree";
+import {
+  getDepartmentList,
+  getDepartmentDel,
+  getDepartmentQuit,
+} from "@/api/config";
+// import * as api from "@/api/config";
 
 export default {
   name: "DepManage",
 
   components: { From },
-  mixins: [classMixin],
   data() {
     return {
       showDialog: false,
-      fromProps: {},
-      tableFilter: {
-        departmentId: "",
-        specializeId: "",
-        search: "",
-        selectIds: [],
-      },
+      studentMessage: {},
+      tableData: [],
+      search: "",
+      selectIds: [],
     };
   },
   computed: {},
   created() {
     this.getList();
-    this.getDepartmentList();
+    // console.log("[ config ]-90", api);
   },
   mounted() {},
   methods: {
     getList() {
-      this.getClassList();
+      getDepartmentList({
+        ...this.pageInit,
+        departmentName: this.search,
+      }).then((res) => {
+        this.tableData = res.rows;
+        this.pageInit.total = res.total;
+        console.log("res", this.tableData);
+      });
     },
-    // getDepartmentList() {
-    //   api
-    //     .getDepartmentList({
-    //       ...this.pageInit,
-    //     })
-    //     .then((res) => {
-    //       this.tableData = res.rows;
-    //       this.pageInit.total = res.total;
-    //       console.log("res", this.tableData);
-    //     });
-    // },
     handleClick(item) {
-      this.fromProps = item;
-      console.log("[ this.fromProps ]-146", this.fromProps);
-
+      this.studentMessage = item || {};
       this.showDialog = true;
     },
     delClick(val) {
@@ -183,17 +146,13 @@ export default {
           });
         });
     },
-
+    recoverClick(row) {
+      console.log("[ row ]-162", row);
+      getDepartmentQuit();
+    },
     handleSelectionChange(val) {
       this.selectIds = val.map((item) => item.id);
-    },
-    selectDepChange(value) {
-      this.tableFilter.specializeId = null;
-      if (!value) {
-        this.speList = [];
-      } else {
-        this.getSpList({ departmentId: value });
-      }
+      console.log("[ this.selectIds ]-178", this.selectIds);
     },
   },
 };

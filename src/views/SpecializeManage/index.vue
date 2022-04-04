@@ -1,7 +1,12 @@
 <template>
   <div class="app-container user-message">
     <div>
-      <From v-if="showDialog" v-model="showDialog" :fromData="fromProps" />
+      <From
+        v-if="showDialog"
+        v-model="showDialog"
+        :fromData="fromProps"
+        :depList="depList"
+      />
       <div class="header-search">
         <div class="left">
           <el-form inline style="width: 100%">
@@ -9,8 +14,6 @@
               <el-select
                 v-model="tableFilter.departmentId"
                 placeholder="请选择系部"
-                clearable
-                @change="selectDepChange"
               >
                 <el-option
                   v-for="(item, index) in depList"
@@ -20,25 +23,11 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="专业选择">
-              <el-select
-                v-model="tableFilter.specializeId"
-                placeholder="请选择专业"
-                clearable
-              >
-                <el-option
-                  v-for="(item, index) in speList"
-                  :key="index"
-                  :label="item.specializeName"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
             <el-form-item>
               <el-input
                 v-model="tableFilter.search"
                 clearable
-                placeholder="请输入班级名"
+                placeholder="请输入专业名"
                 style="width: 340px"
                 @change="getList()"
               >
@@ -51,7 +40,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="handleClick()"
-                >新增班级
+                >新增专业
               </el-button>
             </el-form-item>
             <el-form-item>
@@ -64,7 +53,7 @@
       </div>
     </div>
     <el-table
-      :data="classList"
+      :data="speList"
       border
       style="width: 100%"
       :default-sort="{ prop: 'date', order: 'descending' }"
@@ -74,7 +63,6 @@
       <el-table-column type="index" label="序号" width="50"> </el-table-column>
       <el-table-column prop="departmentName" label="系部名称" sortable />
       <el-table-column prop="specializeName" label="专业名称" sortable />
-      <el-table-column prop="className" label="班级名称" sortable />
       <el-table-column prop="createTime" width="200" label="创建时间 " />
       <el-table-column prop="updateTime" width="200" label="更新时间 " />
 
@@ -124,9 +112,9 @@ export default {
     return {
       showDialog: false,
       fromProps: {},
+      departmentList: [],
       tableFilter: {
         departmentId: "",
-        specializeId: "",
         search: "",
         selectIds: [],
       },
@@ -140,19 +128,8 @@ export default {
   mounted() {},
   methods: {
     getList() {
-      this.getClassList();
+      this.getSpList();
     },
-    // getDepartmentList() {
-    //   api
-    //     .getDepartmentList({
-    //       ...this.pageInit,
-    //     })
-    //     .then((res) => {
-    //       this.tableData = res.rows;
-    //       this.pageInit.total = res.total;
-    //       console.log("res", this.tableData);
-    //     });
-    // },
     handleClick(item) {
       this.fromProps = item;
       console.log("[ this.fromProps ]-146", this.fromProps);
@@ -183,17 +160,13 @@ export default {
           });
         });
     },
-
+    recoverClick(row) {
+      console.log("[ row ]-162", row);
+      getDepartmentQuit();
+    },
     handleSelectionChange(val) {
       this.selectIds = val.map((item) => item.id);
-    },
-    selectDepChange(value) {
-      this.tableFilter.specializeId = null;
-      if (!value) {
-        this.speList = [];
-      } else {
-        this.getSpList({ departmentId: value });
-      }
+      console.log("[ this.selectIds ]-178", this.selectIds);
     },
   },
 };
