@@ -54,27 +54,7 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: '表格', icon: 'table' }
-      }
-      // {
-      //   path: 'tree',
-      //   name: 'Tree',
-      //   component: () => import('@/views/tree/index'),
-      //   meta: { title: 'Tree', icon: 'tree' }
-      // }
-    ]
-  },
+
   {
     path: '/user-manage',
     component: Layout,
@@ -87,19 +67,55 @@ export const constantRoutes = [
       }
     ]
   },
+  // {
+  //   path: '/class-manage',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: '/class-manage',
+  //       name: 'ClassManage',
+  //       component: () => import('@/views/ClassManage'),
+  //       meta: { title: '班级管理', icon: 'form' }
+  //     }
+  //   ]
+  // },
   {
-    path: '/class-manage',
+    path: '/course-manage',
     component: Layout,
     children: [
       {
-        path: '/class-manage',
-        name: 'ClassManage',
-        component: () => import('@/views/ClassManage'),
-        meta: { title: '班级管理', icon: 'form' }
+        path: '/course-manage',
+        name: 'CourseManage',
+        component: () => import('@/views/CourseManage'),
+        meta: { title: '课程管理', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/teaching-manage',
+    component: Layout,
+    children: [
+      {
+        path: '/teaching-manage',
+        name: 'TeachingManage',
+        component: () => import('@/views/TeachingManage'),
+        meta: { title: '授课管理', icon: 'form' }
       }
     ]
   },
 
+  {
+    path: '/teacher-manage',
+    component: Layout,
+    children: [
+      {
+        path: '/teacher-manage',
+        name: 'TeacherManage',
+        component: () => import('@/views/TeacherManage'),
+        meta: { title: '教师管理', icon: 'form' }
+      }
+    ]
+  },
   {
     path: '/student-manage',
     component: Layout,

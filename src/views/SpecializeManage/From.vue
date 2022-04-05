@@ -81,9 +81,10 @@ export default {
     if (this.fromData) {
       console.log("[ this.fromData ]-82", this.fromData);
       this.type = 1;
-      this.ruleForm.departmentId = this.fromData.departmentId;
-      this.ruleForm.specializeName = this.fromData.specializeName;
-      this.ruleForm.id = this.fromData.id;
+      // this.ruleForm.departmentId = this.fromData.departmentId;
+      // this.ruleForm.specializeName = this.fromData.specializeName;
+      // this.ruleForm.id = this.fromData.id;
+      this.ruleForm = { ...this.fromData };
     }
   },
   mounted() {},

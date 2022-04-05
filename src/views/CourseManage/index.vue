@@ -1,25 +1,46 @@
 <template>
   <div class="app-container user-message">
     <div>
-      <el-button
-        type="primary"
-        @click=" showDialog = true"
-      >添加</el-button>
+      <From v-if="showDialog" v-model="showDialog" :fromData="courseMessage" />
       <div class="header-search">
-        <div class="left">111</div>
-        <div class="right">
-          <el-input
-            v-model="key"
-            clearable
-            placeholder="请输入学号"
-            style="width: 340px"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="getList()"
-            />
-          </el-input>
+        <div class="left">
+          <div>
+            <el-button type="primary" @click="handleClick()"
+              >新增课程</el-button
+            >
+          </div>
+          <div>
+            <el-button type="danger" @click="delClick(selectIds)"
+              >批量删除</el-button
+            >
+          </div>
+          <!-- <el-form inline style="width: 100%"> -->
+          <!--   <el-form-item>
+              <el-input
+                v-model="search"
+                clearable
+                placeholder="请输入系部名"
+                style="width: 340px"
+                @change="getList()"
+              >
+                <el-button
+                  slot="append"
+                  icon="el-icon-search"
+                  @click="getList()"
+                />
+              </el-input>
+            </el-form-item> -->
+          <!-- <el-form-item>
+              <el-button type="primary" @click="handleClick()"
+                >新增系部</el-button
+              >
+            </el-form-item>
+            <el-form-item>
+              <el-button type="danger" @click="delClick(selectIds)"
+                >批量删除</el-button
+              >
+            </el-form-item> -->
+          <!-- </el-form> -->
         </div>
       </div>
     </div>
@@ -28,61 +49,31 @@
       border
       style="width: 100%"
       :default-sort="{ prop: 'date', order: 'descending' }"
+      @selection-change="handleSelectionChange"
     >
-      <el-table-column
-        prop="date"
-        label="学号"
-        sortable
-      />
-      <el-table-column
-        prop="name"
-        label="姓名"
-        sortable
-      />
-      <el-table-column
-        prop="address"
-        label="性别"
-      />
-      <el-table-column
-        prop="address"
-        label="身份证号"
-      />
-      <el-table-column
-        prop="address"
-        label="电话"
-      />
-      <el-table-column
-        prop="address"
-        width="180"
-        label="家庭住址"
-      />
-      <el-table-column
-        prop="address"
-        label="入学时间"
-      />
-      <el-table-column
-        prop="address"
-        label="入学年月日"
-      />
-      <el-table-column
-        prop="address"
-        label="创建时间 "
-      />
-      <el-table-column
-        fixed="right"
-        label="操作"
-        width="100"
-      >
+      <el-table-column type="selection" width="55"> </el-table-column>
+      <el-table-column type="index" label="序号" width="50"> </el-table-column>
+      <el-table-column prop="courseName" label="名称" sortable />
+      <el-table-column prop="classperiod" label="课时" />
+
+      <el-table-column prop="createTime" width="200" label="创建时间 " />
+      <el-table-column prop="updateTime" width="200" label="更新时间 " />
+      <el-table-column prop="description" label="课程描述" />
+
+      <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <el-button
-            @click="handleClick(scope.row)"
             type="text"
-            size="small"
-          >查看</el-button>
+            class="table-button"
+            @click="handleClick(scope.row)"
+            >编辑</el-button
+          >
           <el-button
             type="text"
-            size="small"
-          >编辑</el-button>
+            class="table-button"
+            @click="delClick(scope.row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -99,58 +90,101 @@
 </template>
 
 <script>
-export default {
-  name: "CourseManage",
+import From from "./From.vue";
 
-  components: {  },
+import * as api from "@/api/course";
+
+export default {
+  name: "DepManage",
+
+  components: { From },
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ]
-    }
+      showDialog: false,
+      courseMessage: {},
+      tableData: [],
+      search: "",
+      selectIds: [],
+    };
   },
   computed: {},
-  created() { },
-  mounted() { },
-  methods: {}
-}
+  created() {
+    this.getList();
+    // console.log("[ config ]-90", api);
+  },
+  mounted() {},
+  methods: {
+    getList() {
+      api
+        .getCourseList({
+          ...this.pageInit,
+        })
+        .then((res) => {
+          this.tableData = res.rows;
+          this.pageInit.total = res.total;
+        });
+    },
+    handleClick(item) {
+      this.courseMessage = item || {};
+      this.showDialog = true;
+      localStorage.removeItem("speObj");
+    },
+    delClick(val) {
+      val = val.length ? val : [val];
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          api.getCourseRemove(val).then((res) => {
+            this.getList();
+            localStorage.removeItem("speObj");
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    handleSelectionChange(val) {
+      this.selectIds = val.map((item) => item.id);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .user-message {
   .header-search {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    // display: flex;
+    // justify-content: space-between;
+    // align-items: center;
     margin-bottom: 16px;
     .left {
-      .el-select {
-        margin-right: 15px;
+      display: flex;
+
+      flex-direction: row-reverse;
+      div {
+        margin-left: 15px;
       }
     }
     .right {
+      display: flex;
+      div {
+        margin-left: 12px;
+      }
       ::v-deep {
         .el-input-group__append {
           background-color: #fff;
+        }
+        .table-button {
+          color: aqua;
         }
       }
     }

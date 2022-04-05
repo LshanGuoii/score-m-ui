@@ -99,9 +99,10 @@ export default {
   },
   async created() {
     await this.getDepartmentList();
-    await this.getSpList({ departmentId: this.fromData.departmentId });
-    if (this.fromData) {
+
+    if (JSON.stringify(this.fromData) == "{}") {
       console.log("[ this.fromData ]-103", this.fromData);
+      await this.getSpList({ departmentId: this.fromData.departmentId });
       this.type = 1;
       this.ruleForm.className = this.fromData.className;
 

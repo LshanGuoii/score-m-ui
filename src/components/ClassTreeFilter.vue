@@ -3,7 +3,7 @@
     <el-form
       :model="tableFilter"
       ref="tableFilter"
-      label-width="100px"
+      label-width="80px"
       class="demo-tableFilter"
     >
       <div class="from-flex">
@@ -66,7 +66,12 @@ export default {
   mixins: [classMixin],
 
   components: {},
-  props: {},
+  props: {
+    value: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
       tableFilter: {
@@ -77,7 +82,7 @@ export default {
     };
   },
   computed: {
-    // dialogVisible: {
+    // filterObj: {
     //   get: function () {
     //     return this.value;
     //   },
@@ -99,6 +104,7 @@ export default {
       if (!value) {
         this.speList = [];
         this.classList = [];
+        this.tableFilter.departmentId = null;
       } else {
         this.getSpList({ departmentId: value });
       }
@@ -109,8 +115,10 @@ export default {
     },
     selectSpeChange(value) {
       this.tableFilter.classId = null;
+
       if (!value) {
         this.classList = [];
+        this.tableFilter.specializeId = null;
       } else {
         this.getClassList({ specializeId: value });
       }
@@ -121,6 +129,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .from-flex {
-  display: flex;
+  display: inline-block;
+  ::v-deep {
+    .el-form-item {
+      display: inline-block;
+      .el-form-item__content {
+      }
+    }
+  }
 }
 </style>

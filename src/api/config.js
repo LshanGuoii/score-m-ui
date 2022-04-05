@@ -53,7 +53,7 @@ export function getSpList(data) {
 export function getSpRemove(data) {
   return request({
     url: `/specialize/remove`,
-    method: 'post',
+    method: 'DELETE',
     data
   })
 }
@@ -95,7 +95,7 @@ export function getClassUpdate(data) {
 export function getClassRemove(data) {
   return request({
     url: `/class/remove`,
-    method: 'post',
+    method: 'DELETE',
     data
   })
 }

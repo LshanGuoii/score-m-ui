@@ -47,7 +47,7 @@
       <el-table-column prop="createTime" width="200" label="创建时间 " />
       <el-table-column prop="updateTime" width="200" label="更新时间 " />
 
-      <el-table-column label="操作" width="200">
+      <!-- <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -60,6 +60,22 @@
           <el-button
             type="danger"
             size="small"
+            class="table-button"
+            @click="delClick(scope.row.id)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column> -->
+      <el-table-column fixed="right" label="操作" width="100">
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            class="table-button"
+            @click="handleClick(scope.row)"
+            >编辑</el-button
+          >
+          <el-button
+            type="text"
             class="table-button"
             @click="delClick(scope.row.id)"
             >删除</el-button
@@ -119,8 +135,9 @@ export default {
       });
     },
     handleClick(item) {
-      this.studentMessage = item || {};
+      this.studentMessage = item;
       this.showDialog = true;
+      localStorage.removeItem("depObj");
     },
     delClick(val) {
       val = val.length ? val : [val];
@@ -133,6 +150,7 @@ export default {
           getDepartmentDel(val).then((res) => {
             console.log("[ res ]-94", res);
             this.getList();
+            localStorage.removeItem("depObj");
             this.$message({
               type: "success",
               message: "删除成功!",
@@ -146,10 +164,7 @@ export default {
           });
         });
     },
-    recoverClick(row) {
-      console.log("[ row ]-162", row);
-      getDepartmentQuit();
-    },
+
     handleSelectionChange(val) {
       this.selectIds = val.map((item) => item.id);
       console.log("[ this.selectIds ]-178", this.selectIds);

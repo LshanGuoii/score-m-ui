@@ -14,4 +14,25 @@ export function getStudentAdd(data) {
     data
   })
 }
+export function getStudentUpdate(data) {
+  return request({
+    url: `/student/update`,
+    method: 'post',
+    data
+  })
+}
+export function getStudentRemove(data) {
+  return request({
+    url: `/student/remove`,
+    method: 'DELETE',
+    data
+  })
+}
+export function getStudentExport(data) {
+  return request({
+    url: `/student/export`,
+    method: 'post',
+    data
+  })
+}
 

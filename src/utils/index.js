@@ -45,7 +45,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -114,4 +114,22 @@ export function param2Obj(url) {
     }
   })
   return obj
+}
+/**
+ * 流下载
+ * @param {Blob}   data
+ * @param {string} title 文件名
+ */
+export function blobDownload(data, title, suffix = 'xlsx') {
+  const url = window.URL.createObjectURL(new Blob([data]))
+  const link = document.createElement('a')
+  link.style.display = 'none'
+  link.href = url
+  link.setAttribute('download', `${title}_${new Date().getTime()}.${suffix}`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+
+  // 移除blob对象的url
+  window.URL.revokeObjectURL(url)
 }

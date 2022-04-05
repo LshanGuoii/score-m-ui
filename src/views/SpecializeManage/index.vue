@@ -65,8 +65,23 @@
       <el-table-column prop="specializeName" label="专业名称" sortable />
       <el-table-column prop="createTime" width="200" label="创建时间 " />
       <el-table-column prop="updateTime" width="200" label="更新时间 " />
-
-      <el-table-column label="操作" width="200">
+      <el-table-column fixed="right" label="操作" width="100">
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            class="table-button"
+            @click="handleClick(scope.row)"
+            >编辑</el-button
+          >
+          <el-button
+            type="text"
+            class="table-button"
+            @click="delClick(scope.row.id)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -84,7 +99,7 @@
             >删除</el-button
           >
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <el-pagination
       :current-page="pageInit.pageNum"
@@ -116,8 +131,8 @@ export default {
       tableFilter: {
         departmentId: "",
         search: "",
-        selectIds: [],
       },
+      selectIds: [],
     };
   },
   computed: {},
@@ -132,19 +147,18 @@ export default {
     },
     handleClick(item) {
       this.fromProps = item;
-      console.log("[ this.fromProps ]-146", this.fromProps);
-
       this.showDialog = true;
     },
     delClick(val) {
       val = val.length ? val : [val];
+      console.log("[ val ]-141", val);
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
-          getDepartmentDel(val).then((res) => {
+          api.getSpRemove(val).then((res) => {
             console.log("[ res ]-94", res);
             this.getList();
             this.$message({

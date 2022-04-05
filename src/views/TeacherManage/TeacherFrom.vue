@@ -1,43 +1,49 @@
 <template>
   <div class="">
     <el-dialog
-      :title="edit ? '编辑学生' : '新增学生'"
+      :title="edit ? '编辑教师' : '新增教师'"
       :visible.sync="dialogVisible"
       width="50%"
     >
       <el-form
-        :model="stuForm"
-        ref="stuForm"
+        :model="teaForm"
+        ref="teaForm"
         label-width="100px"
-        class="demo-stuForm"
+        class="demo-teaForm"
       >
         <!-- <el-form-item label="学号" prop="stuId">
-          <div>{{ stuForm.stuId }}</div>
+          <div>{{ teaForm.stuId }}</div>
         </el-form-item> -->
         <el-form-item label="姓名" prop="name">
-          <el-input v-model="stuForm.name"></el-input>
+          <el-input v-model="teaForm.teacherName"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="sex">
-          <el-radio-group v-model="stuForm.sex">
+          <el-radio-group v-model="teaForm.sex">
             <el-radio :label="1">男</el-radio>
             <el-radio :label="0">女</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="stuForm.phone"></el-input>
+        <el-form-item label="电话" prop="telphone">
+          <el-input v-model="teaForm.telphone"></el-input>
         </el-form-item>
-        <el-form-item label="身份证号" prop="cardNum">
-          <el-input v-model="stuForm.cardNum"></el-input>
+
+        <el-form-item label="所属系部" prop="address">
+          <el-select
+            v-model="teaForm.teacherDepartmentId"
+            placeholder="请选择系部"
+          >
+            <el-option
+              v-for="(item, index) in depList"
+              :key="index"
+              :label="item.departmentName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="家庭住址" prop="address">
-          <el-input v-model="stuForm.address"></el-input>
-        </el-form-item>
-        <el-form-item label="班级选择" class="tree-from">
-          <ClassTreeFrom v-model="fromFilter" />
-        </el-form-item>
-        <el-form-item label="入学时间" prop="entranceTime">
+
+        <el-form-item label="入学时间" prop="admissionTime">
           <el-date-picker
-            v-model="stuForm.entranceTime"
+            v-model="teaForm.admissionTime"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="选择日期"
@@ -47,7 +53,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="studentAddClick">确 定</el-button>
+        <el-button type="primary" @click="teacherAddClick">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -55,9 +61,12 @@
 
 <script>
 import ClassTreeFrom from "./../../components/ClassTreeFrom.vue";
-import * as api from "@/api/student";
+import * as api from "@/api/teacher";
+import classMixin from "@/mixins/classTree";
+
 export default {
   name: "StudentFrom",
+  mixins: [classMixin],
 
   components: { ClassTreeFrom },
   props: {
@@ -72,45 +81,15 @@ export default {
   },
   data() {
     return {
-      stuForm: {
-        name: "罗赏",
+      teaForm: {
+        teacherName: "罗赏",
         sex: null,
-        phone: "123131231",
-        cardNum: "1244444",
-        address: "混啊",
-        classId: "",
-        entranceTime: "",
+        telphone: "123131231",
+        teacherDepartmentId: "",
+        admissionTime: "",
       },
-      fromFilter: {
-        departmentId: "",
-        specializeId: "",
-        classId: "",
-      },
+
       edit: false,
-      // rules: {
-      //   name: [
-      //     { required: true, message: '请输入活动名称', trigger: 'blur' },
-      //     { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-      //   ],
-      //   region: [
-      //     { required: true, message: '请选择活动区域', trigger: 'change' }
-      //   ],
-      //   date1: [
-      //     { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-      //   ],
-      //   date2: [
-      //     { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-      //   ],
-      //   type: [
-      //     { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-      //   ],
-      //   resource: [
-      //     { required: true, message: '请选择活动资源', trigger: 'change' }
-      //   ],
-      //   desc: [
-      //     { required: true, message: '请填写活动形式', trigger: 'blur' }
-      //   ]
-      // }
     };
   },
   computed: {
@@ -124,10 +103,11 @@ export default {
     },
   },
   created() {
+    this.getDepartmentList();
     if (JSON.stringify(this.fromData) !== "{}") {
       console.log("[ this.fromData ]-128", this.fromData);
-      this.stuForm = { ...this.fromData };
-      console.log("[ this.stuForm ]-124", this.stuForm);
+      this.teaForm = { ...this.fromData };
+      console.log("[ this.teaForm ]-124", this.teaForm);
       this.edit = true;
       // this.ruleForm.departmentId = this.fromData.departmentId;
       // this.ruleForm.specializeName = this.fromData.specializeName;
@@ -135,10 +115,10 @@ export default {
     }
   },
   mounted() {
-    const { departmentId, specializeId, classId } = this.fromData;
-    this.fromFilter.departmentId = parseInt(departmentId) || "";
-    this.fromFilter.specializeId = parseInt(specializeId) || "";
-    this.fromFilter.classId = parseInt(classId) || "";
+    // const { departmentId, specializeId, classId } = this.fromData;
+    // this.fromFilter.departmentId = parseInt(departmentId) || "";
+    // this.fromFilter.specializeId = parseInt(specializeId) || "";
+    // this.fromFilter.classId = parseInt(classId) || "";
   },
   methods: {
     submitForm(formName) {
@@ -154,16 +134,15 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    studentAddClick() {
+    teacherAddClick() {
       let params = {
-        ...this.stuForm,
-        classId: this.fromFilter.classId,
+        ...this.teaForm,
       };
       if (!this.edit) {
-        api.getStudentAdd(params).then((res) => {
+        console.log("[ params ]-143", params);
+        api.getTeacherAdd(params).then((res) => {
           console.log("[ res ]-136", res);
           this.$parent.getList();
-
           this.$message({
             type: "success",
             message: `${res.msg}`,
@@ -171,9 +150,8 @@ export default {
           this.dialogVisible = false;
         });
       } else {
-        api.getStudentUpdate(params).then((res) => {
+        api.getTeacherUpdate(params).then((res) => {
           this.$parent.getList();
-
           this.$message({
             type: "success",
             message: `${res.msg}`,

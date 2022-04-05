@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <el-dialog
-      :title="!edit ? '编辑' : '新增'"
+      :title="edit ? '编辑' : '新增'"
       :visible.sync="dialogVisible"
       width="70%"
     >
@@ -12,11 +12,30 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="系部" prop="departmentName">
+        <el-form-item label="课程名称" prop="departmentName">
           <el-input
-            v-model="ruleForm.departmentName"
+            v-model="ruleForm.courseName"
             style="width: 200px"
           ></el-input>
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input type="textarea" v-model="ruleForm.description"></el-input>
+        </el-form-item>
+        <el-form-item label="课时">
+          <el-input-number
+            v-model="ruleForm.classperiod"
+            :min="1"
+            :max="100"
+            label="请输入课时"
+          ></el-input-number>
+        </el-form-item>
+        <el-form-item label="学分">
+          <el-input-number
+            v-model="ruleForm.credits"
+            :min="1"
+            :max="50"
+            label="请输入学分"
+          ></el-input-number>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -28,10 +47,9 @@
 </template>
 
 <script>
-import { getDepartmentAdd, getdepartmentupdate } from "@/api/config";
+import * as api from "@/api/course";
 export default {
   name: "StudentFrom",
-
   components: {},
   props: {
     value: {
@@ -46,12 +64,15 @@ export default {
   data() {
     return {
       ruleForm: {
-        departmentName: "",
+        courseName: "",
+        description: "",
+        classperiod: 0,
+        credits: 0,
       },
-      edit: false, // 0 新增 1 编辑
+      edit: false,
       rules: {
         departmentName: [
-          { required: true, message: "请输入系部名称", trigger: "blur" },
+          // { required: true, message: "请输入系部名称", trigger: "blur" },
         ],
       },
     };
@@ -67,9 +88,9 @@ export default {
     },
   },
   created() {
-    if (JSON.stringify(this.fromData) == "{}") {
-      this.edit = true;
+    if (JSON.stringify(this.fromData) !== "{}") {
       // this.ruleForm.departmentName = this.fromData.departmentName;
+      this.edit = true;
       this.ruleForm = { ...this.fromData };
     }
   },
@@ -88,7 +109,7 @@ export default {
     handleClick() {
       console.log("[ handleClick ]-78");
       if (!this.edit) {
-        getDepartmentAdd(this.ruleForm).then((res) => {
+        api.getCourseAdd(this.ruleForm).then((res) => {
           this.$parent.getList();
           console.log("[ res ]-81", res);
           this.$message({
@@ -97,7 +118,7 @@ export default {
           });
         });
       } else {
-        getdepartmentupdate(this.ruleForm).then((res) => {
+        api.getCourseUpdate(this.ruleForm).then((res) => {
           console.log("[ res ]-81", res);
           this.$parent.getList();
           this.$message({

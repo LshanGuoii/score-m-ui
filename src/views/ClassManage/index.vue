@@ -78,19 +78,16 @@
       <el-table-column prop="createTime" width="200" label="创建时间 " />
       <el-table-column prop="updateTime" width="200" label="更新时间 " />
 
-      <el-table-column label="操作" width="200">
+      <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <el-button
-            type="primary"
-            size="small"
+            type="text"
             class="table-button"
             @click="handleClick(scope.row)"
             >编辑</el-button
           >
-
           <el-button
-            type="danger"
-            size="small"
+            type="text"
             class="table-button"
             @click="delClick(scope.row.id)"
             >删除</el-button
@@ -155,9 +152,9 @@ export default {
     // },
     handleClick(item) {
       this.fromProps = item;
-      console.log("[ this.fromProps ]-146", this.fromProps);
 
       this.showDialog = true;
+      localStorage.removeItem("classObj");
     },
     delClick(val) {
       val = val.length ? val : [val];
@@ -167,9 +164,9 @@ export default {
         type: "warning",
       })
         .then(() => {
-          getDepartmentDel(val).then((res) => {
-            console.log("[ res ]-94", res);
+          api.getClassRemove(val).then((res) => {
             this.getList();
+            localStorage.removeItem("classObj");
             this.$message({
               type: "success",
               message: "删除成功!",

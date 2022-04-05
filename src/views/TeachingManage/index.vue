@@ -18,7 +18,7 @@
       </div>
       <div class="head-button">
         <div>
-          <el-button type="primary" @click="handleClick()">新增学生</el-button>
+          <el-button type="primary" @click="handleClick()">授课绑定</el-button>
           <el-button type="danger" @click="delClick(selectIds)"
             >批量删除</el-button
           >
@@ -30,24 +30,24 @@
     <el-table
       :data="tableData"
       border
-      v-loading="loading"
       style="width: 100%"
       :default-sort="{ prop: 'date', order: 'descending' }"
       @selection-change="handleSelectionChange"
+      v-loading="loading"
     >
       <el-table-column type="selection" width="55"> </el-table-column>
 
-      <el-table-column prop="stuId" label="学号" sortable />
-      <el-table-column prop="name" label="姓名" sortable />
-      <el-table-column prop="sex" label="性别">
+      <el-table-column prop="teacherName" label="任课教师" sortable />
+      <el-table-column prop="year" label="学年" />
+      <el-table-column prop="term" label="学期">
         <template slot-scope="scope">
-          <span>{{ scope.row.sex ? "男" : "女" }}</span>
+          <span>{{ scope.row.term ? "下学期" : "上学期" }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="departmentName" label="系部" />
       <el-table-column prop="specializeName" label="专业" />
       <el-table-column prop="className" label="班级" />
-      <el-table-column prop="entranceTime" label="入学时间" />
+
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <!-- <el-button
@@ -83,8 +83,8 @@
 
 <script>
 import StudentFrom from "./StudentFrom.vue";
-import * as api from "@/api/student";
-import ClassTreeFilter from "./../../components/ClassTreeFilter.vue";
+import * as api from "@/api/teaching";
+import ClassTreeFilter from "@/components/ClassTreeFilter.vue";
 import { blobDownload } from "@/utils";
 export default {
   name: "StudentManage",
@@ -116,7 +116,7 @@ export default {
         specializeId: specializeId,
         stuId: "",
       };
-      api.getStudentList(params).then((res) => {
+      api.getTeacherYoungList(params).then((res) => {
         console.log("[ res ]-111", res);
         this.tableData = res.rows;
         this.pageInit.total = res.total;
@@ -137,7 +137,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          api.getStudentRemove(val).then((res) => {
+          api.getTeacherYoungRemove(val).then((res) => {
             this.getList();
             this.$message({
               type: "success",
@@ -165,10 +165,10 @@ export default {
         ids: this.selectIds,
         isExport: true,
       };
-      api.getStudentExport(params).then((res) => {
-        console.log("[ res ]-163", res);
-        blobDownload(res.data, "学生列表");
-      });
+      // api.getTeacherYoungExport(params).then((res) => {
+      //   console.log("[ res ]-163", res);
+      //   blobDownload(res.data, "学生列表");
+      // });
     },
   },
 };
