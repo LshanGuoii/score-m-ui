@@ -149,7 +149,7 @@ export default {
           console.log("error submit!!");
           return false;
         }
-      });
+      }); 
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
