@@ -67,6 +67,30 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/tiny-manage',
+    component: Layout,
+    // alwaysShow: true,
+    children: [
+      {
+        path: '/tiny-manage',
+        name: 'TinyManage',
+
+        component: () => import('@/views/TinyManage'),
+        meta: { title: '成绩管理', icon: 'form', },
+        // children: [
+
+        // ]
+      },
+      {
+        path: '/tiny-manage/result-list',
+        name: 'resultList',
+        hidden: true,
+        component: () => import('@/views/TinyManage/resultList'),
+        meta: { title: '学生成绩详情', icon: 'form', }
+      }
+    ]
+  },
   // {
   //   path: '/class-manage',
   //   component: Layout,
