@@ -21,7 +21,14 @@ export function getTinyAdd(data) {
     data
   })
 }
-export function getStudentUpdate(data) {
+export function getTinyUpdate(data) {
+  return request({
+    url: `/tiny/update`,
+    method: 'get',
+    data
+  })
+}
+export function getTinyByStuId(data) {
   return request({
     url: `/tiny/getTinyByStuId/${data.stuId}`,
     method: 'get',

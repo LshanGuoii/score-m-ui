@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="enter-result">
     <el-dialog
       :title="edit ? '编辑学生' : '新增学生'"
       :visible.sync="dialogVisible"
@@ -14,52 +14,49 @@
         <!-- <el-form-item label="学号" prop="stuId">
           <div>{{ stuForm.stuId }}</div>
         </el-form-item> -->
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="stuForm.name"></el-input>
+        <el-form-item label="课程名称:" prop="address">
+          <el-tag>{{ stuForm.courseName }}</el-tag>
         </el-form-item>
-        <el-form-item label="性别" prop="sex">
-          <el-radio-group v-model="stuForm.sex">
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="0">女</el-radio>
-          </el-radio-group>
+        <el-form-item label="姓名:" prop="name">
+          <div>{{ stuForm.stuName }}</div>
         </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="stuForm.phone"></el-input>
+        <el-form-item label="学期:" prop="sex">
+          <div>{{ stuForm.term ? "下学期" : "上学期" }}</div>
         </el-form-item>
-        <el-form-item label="身份证号" prop="cardNum">
-          <el-input v-model="stuForm.cardNum"></el-input>
+        <el-form-item label="学年:" prop="phone">
+          <div>{{ stuForm.year }}</div>
         </el-form-item>
-        <el-form-item label="家庭住址" prop="address">
-          <el-input v-model="stuForm.address"></el-input>
+        <el-form-item label="出勤成绩:" prop="attendScore">
+          <el-input v-model="stuForm.attendScore"></el-input>(分)
         </el-form-item>
-        <el-form-item label="班级选择" class="tree-from">
-          <ClassTreeFrom v-model="fromFilter" />
+        <el-form-item label="作业成绩:" prop="cardNum">
+          <el-input v-model="stuForm.taskScore"></el-input>(分)
         </el-form-item>
-        <el-form-item label="入学时间" prop="entranceTime">
-          <el-date-picker
-            v-model="stuForm.entranceTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择日期"
-          >
-          </el-date-picker>
+        <el-form-item label="实验成绩:" prop="address">
+          <el-input v-model="stuForm.experimentScore"></el-input>(分)
+        </el-form-item>
+        <el-form-item label="其他成绩:" prop="address">
+          <el-input v-model="stuForm.otherScore"></el-input>(分)
+        </el-form-item>
+        <el-form-item label="总成绩:" prop="totalScore">
+          <el-input v-model="stuForm.totalScore"></el-input>(分)
+          <span>(自动累加)</span>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="studentAddClick">确 定</el-button>
+        <el-button type="primary" @click="enterResultClick">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import ClassTreeFrom from "../../components/ClassTreeFrom.vue";
-import * as api from "@/api/student";
+import * as api from "@/api/tiny";
 export default {
   name: "StudentFrom",
 
-  components: { ClassTreeFrom },
+  components: {},
   props: {
     value: {
       type: Boolean,
@@ -73,20 +70,16 @@ export default {
   data() {
     return {
       stuForm: {
-        name: "罗赏",
-        sex: null,
-        phone: "123131231",
-        cardNum: "1244444",
-        address: "混啊",
-        classId: "",
-        entranceTime: "",
+        name: "",
+        term: null,
+        year: "",
+        attendScore: "",
+        taskScore: "",
+        experimentScore: "",
+        otherScore: "",
+        totalScore: "",
+        courseName: "",
       },
-      fromFilter: {
-        departmentId: "",
-        specializeId: "",
-        classId: "",
-      },
-      edit: false,
       // rules: {
       //   name: [
       //     { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -128,18 +121,9 @@ export default {
       console.log("[ this.fromData ]-128", this.fromData);
       this.stuForm = { ...this.fromData };
       console.log("[ this.stuForm ]-124", this.stuForm);
-      this.edit = true;
-      // this.ruleForm.departmentId = this.fromData.departmentId;
-      // this.ruleForm.specializeName = this.fromData.specializeName;
-      // this.ruleForm.id = this.fromData.id;
     }
   },
-  mounted() {
-    const { departmentId, specializeId, classId } = this.fromData;
-    this.fromFilter.departmentId = parseInt(departmentId) || "";
-    this.fromFilter.specializeId = parseInt(specializeId) || "";
-    this.fromFilter.classId = parseInt(classId) || "";
-  },
+  mounted() {},
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -154,16 +138,14 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    studentAddClick() {
+    enterResultClick() {
       let params = {
         ...this.stuForm,
-        classId: this.fromFilter.classId,
       };
-      if (!this.edit) {
-        api.getStudentAdd(params).then((res) => {
+      if (!this.stuForm.entered) {
+        api.getTinyAdd(params).then((res) => {
           console.log("[ res ]-136", res);
           this.$parent.getList();
-
           this.$message({
             type: "success",
             message: `${res.msg}`,
@@ -171,9 +153,8 @@ export default {
           this.dialogVisible = false;
         });
       } else {
-        api.getStudentUpdate(params).then((res) => {
+        api.getTinyUpdate(params).then((res) => {
           this.$parent.getList();
-
           this.$message({
             type: "success",
             message: `${res.msg}`,
@@ -186,10 +167,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.tree-from {
-  ::v-deep {
-    el-form-item__content {
-      margin-left: 0;
+.enter-result {
+  .demo-stuForm {
+    ::v-deep {
+      .el-form-item {
+        .el-form-item__content {
+          .el-input {
+            width: 20%;
+          }
+        }
+      }
     }
   }
 }

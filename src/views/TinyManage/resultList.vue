@@ -139,27 +139,34 @@ export default {
   },
   computed: {},
   created() {
+    console.log("[ this.$router ]-143", this.$route);
     this.getList();
   },
   mounted() {},
   methods: {
     getList() {
+      const { classId } = this.$route.query;
       this.loading = true;
       let params = {
-        ...this.tableFilter,
+        classId: classId,
+        // ...this.tableFilter,
         ...this.pageInit,
-
-        stuId: "",
       };
       api.getTinyList(params).then((res) => {
         console.log("[ res ]-111", res);
         this.tableData = res.rows;
+        this.tableData.term = this.$route.query.term;
+        this.tableData.year = this.$route.query.year;
+        this.tableData.courseId = this.$route.query.courseId;
         this.pageInit.total = res.total;
         this.loading = false;
       });
     },
     handleClick(item) {
       this.TinyMessage = item || {};
+      this.TinyMessage.term = this.$route.query.term;
+      this.TinyMessage.year = this.$route.query.year;
+      this.TinyMessage.courseId = this.$route.query.courseId;
       this.showDialog = true;
     },
     handleSelectionChange(val) {
