@@ -1,30 +1,14 @@
 <template>
   <div class="app-container user-message">
     <div>
-      <From v-if="showDialog" v-model="showDialog" :fromData="studentMessage" />
       <div class="header-search">
         <div class="left">
           <el-form inline style="width: 100%">
             <el-form-item>
-              <el-input
-                v-model="search"
-                clearable
-                placeholder="请输入系部名"
-                style="width: 340px"
-                @change="getList()"
-              >
-                <el-button
-                  slot="append"
-                  icon="el-icon-search"
-                  @click="getList()"
-                />
-              </el-input>
+           
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="handleClick()"
-                >新增系部</el-button
-              >
-            </el-form-item>
+
             <el-form-item>
               <el-button type="danger" @click="delClick(selectIds)"
                 >批量删除</el-button
@@ -46,34 +30,9 @@
       <el-table-column prop="departmentName" label="学院名称" sortable />
       <el-table-column prop="createTime" width="200" label="创建时间 " />
       <el-table-column prop="updateTime" width="200" label="更新时间 " />
-
-      <!-- <el-table-column label="操作" width="200">
-        <template slot-scope="scope">
-          <el-button
-            type="primary"
-            size="small"
-            class="table-button"
-            @click="handleClick(scope.row)"
-            >编辑</el-button
-          >
-
-          <el-button
-            type="danger"
-            size="small"
-            class="table-button"
-            @click="delClick(scope.row.id)"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column> -->
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
-          <el-button
-            type="text"
-            class="table-button"
-            @click="handleClick(scope.row)"
-            >编辑</el-button
-          >
+         
           <el-button
             type="text"
             class="table-button"
