@@ -8,7 +8,7 @@
            
             </el-form-item>
             <el-form-item>
-
+  <el-button type="primary" @click="exportClick()">导出</el-button>
             <el-form-item>
               <el-button type="danger" @click="delClick(selectIds)"
                 >批量删除</el-button
@@ -27,7 +27,7 @@
     >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column type="index" label="序号" width="50"> </el-table-column>
-      <el-table-column prop="departmentName" label="学院名称" sortable />
+      <el-table-column prop="beginTime" label="操作开始时间" sortable />
       <el-table-column prop="createTime" width="200" label="创建时间 " />
       <el-table-column prop="updateTime" width="200" label="更新时间 " />
       <el-table-column fixed="right" label="操作" width="100">
@@ -56,12 +56,7 @@
 
 <script>
 import From from "./From.vue";
-import {
-  getDepartmentList,
-  getDepartmentDel,
-  getDepartmentQuit,
-} from "@/api/config";
-// import * as api from "@/api/config";
+ import * as api from "@/api/log";
 
 export default {
   name: "DepManage",
@@ -79,12 +74,11 @@ export default {
   computed: {},
   created() {
     this.getList();
-    // console.log("[ config ]-90", api);
   },
   mounted() {},
   methods: {
     getList() {
-      getDepartmentList({
+      api.getDOperlogList({
         ...this.pageInit,
         departmentName: this.search,
       }).then((res) => {
@@ -106,10 +100,9 @@ export default {
         type: "warning",
       })
         .then(() => {
-          getDepartmentDel(val).then((res) => {
+          api.getOperlogRemove(val).then((res) => {
             console.log("[ res ]-94", res);
             this.getList();
-            localStorage.removeItem("depObj");
             this.$message({
               type: "success",
               message: "删除成功!",
@@ -127,6 +120,15 @@ export default {
     handleSelectionChange(val) {
       this.selectIds = val.map((item) => item.id);
       console.log("[ this.selectIds ]-178", this.selectIds);
+    },
+     exportClick() {
+      let params = {
+        ids: this.selectIds,
+        isExport: true,
+      };
+      api.getOperlogExport(params).then((res) => {
+        blobDownload(res.data, "日志");
+      });
     },
   },
 };

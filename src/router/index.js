@@ -22,6 +22,7 @@ import Layout from '@/layout'
     icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
     breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+    type: 1 / 2/ 3 1-admin,2-teacher,3-student
   }
  */
 
@@ -33,6 +34,7 @@ import Layout from '@/layout'
 export const constantRoutes = [
   {
     path: '/login',
+
     component: () => import('@/views/login/index'),
     hidden: true
   },
@@ -54,19 +56,28 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
-
   {
-    path: '/user-manage',
+    path: '/person-info',
     component: Layout,
-    children: [
-      {
-        path: '/user-manage',
-        name: 'UserManage',
-        component: () => import('@/views/UserManage'),
-        meta: { title: '用户管理', icon: 'form' }
-      }
-    ]
+    children: [{
+      path: '/person-info',
+      name: 'PersonInfo',
+      component: () => import('@/views/PersonInfo'),
+      meta: { title: '个人信息', icon: 'dashboard' }
+    }]
   },
+  // {
+  //   path: '/user-manage',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: '/user-manage',
+  //       name: 'UserManage',
+  //       component: () => import('@/views/UserManage'),
+  //       meta: { title: '用户管理', icon: 'form' }
+  //     }
+  //   ]
+  // },
   {
     path: '/tiny-manage',
     component: Layout,
@@ -77,7 +88,7 @@ export const constantRoutes = [
         name: 'TinyManage',
 
         component: () => import('@/views/TinyManage'),
-        meta: { title: '成绩管理', icon: 'form', },
+        meta: { title: '成绩管理', icon: 'form',type:2 },
         // children: [
 
         // ]
@@ -87,7 +98,7 @@ export const constantRoutes = [
         name: 'resultList',
         hidden: true,
         component: () => import('@/views/TinyManage/resultList'),
-        meta: { title: '学生成绩详情', icon: 'form', }
+        meta: { title: '学生成绩详情', icon: 'form',type:2  }
       }
     ]
   },
@@ -111,7 +122,7 @@ export const constantRoutes = [
         path: '/course-manage',
         name: 'CourseManage',
         component: () => import('@/views/CourseManage'),
-        meta: { title: '课程管理', icon: 'form' }
+        meta: { title: '课程管理', icon: 'form',type:1 }
       }
     ]
   },
@@ -123,7 +134,7 @@ export const constantRoutes = [
         path: '/teaching-manage',
         name: 'TeachingManage',
         component: () => import('@/views/TeachingManage'),
-        meta: { title: '授课管理', icon: 'form' }
+        meta: { title: '授课管理', icon: 'form',type:1 }
       }
     ]
   },
@@ -136,7 +147,7 @@ export const constantRoutes = [
         path: '/teacher-manage',
         name: 'TeacherManage',
         component: () => import('@/views/TeacherManage'),
-        meta: { title: '教师管理', icon: 'form' }
+        meta: { title: '教师管理', icon: 'form',type:1  }
       }
     ]
   },
@@ -148,14 +159,14 @@ export const constantRoutes = [
         path: '/student-manage',
         name: 'StudentManage',
         component: () => import('@/views/StudentManage'),
-        meta: { title: '学生管理', icon: 'form' }
+        meta: { title: '学生管理', icon: 'form',type:1  }
       }
     ]
   },
   {
     path: '/student',
     redirect: 'dep-manage',
-    meta: { title: '配置管理', icon: 'form' },
+    meta: { title: '配置管理', icon: 'form',type:1  },
     component: Layout,
     children: [
       {

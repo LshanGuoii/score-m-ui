@@ -34,7 +34,15 @@ export default {
   computed: {
     ...mapGetters(["sidebar"]),
     routes() {
-      return this.$router.options.routes;
+      console.log('[ this.$router.options.routes ]-38', this.$router.options.routes);
+      // const routes =  this.$router.options.routes.map(item =>{
+      //     if(item.meta.type === '' || item.meta.type === undefined){
+      //   return item
+      //     }
+      //   })
+      //   })
+      const routes = this.$router.options.routes
+      return routes;
     },
     activeMenu() {
       const route = this.$route;
