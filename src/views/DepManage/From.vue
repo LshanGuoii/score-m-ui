@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <el-dialog
-      :title="!edit ? '编辑' : '新增'"
+      :title="edit ? '编辑' : '新增'"
       :visible.sync="dialogVisible"
       width="70%"
     >
@@ -67,7 +67,8 @@ export default {
     },
   },
   created() {
-    if (JSON.stringify(this.fromData) == "{}") {
+    if (this.fromData) {
+      console.log("[ this.fromData ]-71", this.fromData);
       this.edit = true;
       // this.ruleForm.departmentName = this.fromData.departmentName;
       this.ruleForm = { ...this.fromData };

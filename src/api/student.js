@@ -35,4 +35,20 @@ export function getStudentExport(data) {
     data
   })
 }
+export function getStudentImportData(data) {
+  return request({
+    url: `/student/importData`,
+    method: 'post',
+    data
+  })
+}
+export function getStudentImportTemplate(data) {
+  return request({
+    url: `/student/importTemplate`,
+    method: 'post',
+    data
+  })
+}
+
+
 

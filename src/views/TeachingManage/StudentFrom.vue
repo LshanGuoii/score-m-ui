@@ -51,7 +51,7 @@
         <el-form-item label="班级选择" class="tree-from">
           <ClassTreeFrom v-model="fromFilter" />
         </el-form-item>
-        <el-form-item label="年份" prop="year">
+        <el-form-item label="学年" prop="year">
           <el-date-picker
             v-model="teachinigFrom.year"
             type="year"

@@ -4,11 +4,10 @@
       <div class="header-search">
         <div class="left">
           <el-form inline style="width: 100%">
+            <el-form-item> </el-form-item>
             <el-form-item>
-           
+              <el-button type="primary" @click="exportClick()">导出</el-button>
             </el-form-item>
-            <el-form-item>
-  <el-button type="primary" @click="exportClick()">导出</el-button>
             <el-form-item>
               <el-button type="danger" @click="delClick(selectIds)"
                 >批量删除</el-button
@@ -27,12 +26,47 @@
     >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column type="index" label="序号" width="50"> </el-table-column>
-      <el-table-column prop="beginTime" label="操作开始时间" sortable />
-      <el-table-column prop="createTime" width="200" label="创建时间 " />
-      <el-table-column prop="updateTime" width="200" label="更新时间 " />
+      <el-table-column
+        prop="operTime"
+        width="200"
+        label="操作开始时间"
+        sortable
+      />
+      <el-table-column prop="businessType" label="业务类型">
+        <template slot-scope="scope">
+          <span>{{
+            scope.row.businessType
+              ? scope.row.businessType === 1
+                ? "新增"
+                : "修改"
+              : "其他"
+          }}</span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column prop="businessTypes" width="200" label="业务类型集合">
+        <template slot-scope="scope">
+          <span>{{
+            scope.row.businessType
+              ? scope.row.businessType === 1
+                ? "新增"
+                : "修改"
+              : "其他"
+          }}</span>
+        </template>
+      </el-table-column> -->
+      <!-- <el-table-column prop="endTime" width="200" label="操作结束时间" /> -->
+      <el-table-column prop="jsonResult" width="200" label="返回参数" />
+
+      <el-table-column prop="operName" width="200" label="操作人员" />
+      <el-table-column prop="status" width="200" label="操作状态">
+        <template slot-scope="scope">
+          <span>{{ scope.row.status ? "异常" : "正常" }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="title" width="200" label="模块标题" />
+
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
-         
           <el-button
             type="text"
             class="table-button"
@@ -56,8 +90,8 @@
 
 <script>
 import From from "./From.vue";
- import * as api from "@/api/log";
-
+import * as api from "@/api/log";
+import { blobDownload } from "@/utils";
 export default {
   name: "DepManage",
 
@@ -78,14 +112,15 @@ export default {
   mounted() {},
   methods: {
     getList() {
-      api.getDOperlogList({
-        ...this.pageInit,
-        departmentName: this.search,
-      }).then((res) => {
-        this.tableData = res.rows;
-        this.pageInit.total = res.total;
-        console.log("res", this.tableData);
-      });
+      api
+        .getOperlogList({
+          ...this.pageInit,
+        })
+        .then((res) => {
+          this.tableData = res.rows;
+          this.pageInit.total = res.total;
+          console.log("res", this.tableData);
+        });
     },
     handleClick(item) {
       this.studentMessage = item;
@@ -121,12 +156,13 @@ export default {
       this.selectIds = val.map((item) => item.id);
       console.log("[ this.selectIds ]-178", this.selectIds);
     },
-     exportClick() {
+    exportClick() {
       let params = {
         ids: this.selectIds,
         isExport: true,
       };
       api.getOperlogExport(params).then((res) => {
+        console.log("[ res ]-165", res);
         blobDownload(res.data, "日志");
       });
     },
@@ -138,6 +174,8 @@ export default {
   .header-search {
     display: flex;
     justify-content: space-between;
+    flex-direction: row-reverse;
+
     align-items: center;
     margin-bottom: 16px;
     .left {

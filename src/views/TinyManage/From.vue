@@ -1,7 +1,7 @@
 <template>
   <div class="enter-result">
     <el-dialog
-      :title="edit ? '编辑学生' : '新增学生'"
+      :title="stuForm.entered ? '编辑分数' : '新增分数'"
       :visible.sync="dialogVisible"
       width="50%"
     >
@@ -14,74 +14,38 @@
         <!-- <el-form-item label="学号" prop="stuId">
           <div>{{ stuForm.stuId }}</div>
         </el-form-item> -->
-        <el-form-item
-          label="课程名称:"
-          prop="address"
-        >
+        <el-form-item label="课程名称:" prop="address">
           <el-tag>{{ stuForm.courseName }}</el-tag>
         </el-form-item>
-        <el-form-item
-          label="姓名:"
-          prop="name"
-        >
+        <el-form-item label="姓名:" prop="name">
           <div>{{ stuForm.stuName }}</div>
         </el-form-item>
-        <el-form-item
-          label="学期:"
-          prop="sex"
-        >
+        <el-form-item label="学期:" prop="sex">
           <div>{{ stuForm.term ? "下学期" : "上学期" }}</div>
         </el-form-item>
-        <el-form-item
-          label="学年:"
-          prop="phone"
-        >
+        <el-form-item label="学年:" prop="phone">
           <div>{{ stuForm.year }}</div>
         </el-form-item>
-        <el-form-item
-          label="出勤成绩:"
-          prop="attendScore"
-        >
+        <el-form-item label="出勤成绩:" prop="attendScore">
           <el-input v-model="stuForm.attendScore"></el-input>(分)
         </el-form-item>
-        <el-form-item
-          label="作业成绩:"
-          prop="cardNum"
-        >
+        <el-form-item label="作业成绩:" prop="cardNum">
           <el-input v-model="stuForm.taskScore"></el-input>(分)
         </el-form-item>
-        <el-form-item
-          label="实验成绩:"
-          prop="address"
-        >
+        <el-form-item label="实验成绩:" prop="address">
           <el-input v-model="stuForm.experimentScore"></el-input>(分)
         </el-form-item>
-        <el-form-item
-          label="其他成绩:"
-          prop="address"
-        >
+        <el-form-item label="其他成绩:" prop="address">
           <el-input v-model="stuForm.otherScore"></el-input>(分)
         </el-form-item>
-        <el-form-item
-          label="总成绩:"
-          prop="totalScore"
-        >
-          <el-input
-            disabled
-            v-model="totalScore"
-          ></el-input>(分)
+        <el-form-item label="总成绩:" prop="totalScore">
+          <el-input disabled v-model="totalScore"></el-input>(分)
           <span>(自动累加)</span>
         </el-form-item>
       </el-form>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
+      <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button
-          type="primary"
-          @click="enterResultClick"
-        >确 定</el-button>
+        <el-button type="primary" @click="enterResultClick">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -100,7 +64,7 @@ export default {
     },
     fromData: {
       type: Object,
-      default: () => { },
+      default: () => {},
     },
   },
   data() {
@@ -140,7 +104,7 @@ export default {
       //     { required: true, message: '请填写活动形式', trigger: 'blur' }
       //   ]
       // }
-    }
+    };
   },
   computed: {
     dialogVisible: {
@@ -152,16 +116,20 @@ export default {
       },
     },
     totalScore() {
-      return this.stuForm.attendScore + this.stuForm.taskScore +
-        this.stuForm.experimentScore + this.stuForm.otherScore;
-    }
+      const result =
+        parseInt(this.stuForm.attendScore) +
+        parseInt(this.stuForm.taskScore) +
+        parseInt(this.stuForm.experimentScore) +
+        parseInt(this.stuForm.otherScore);
+      return result || 0;
+    },
   },
   created() {
     console.log("[ this.fromData ]-128", this.fromData);
     this.stuForm = { ...this.fromData };
     console.log("[ this.stuForm ]-124", this.stuForm);
   },
-  mounted() { },
+  mounted() {},
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -179,6 +147,7 @@ export default {
     enterResultClick() {
       let params = {
         ...this.stuForm,
+        totalScore: this.totalScore,
       };
       if (!this.stuForm.entered) {
         api.getTinyAdd(params).then((res) => {
@@ -201,9 +170,7 @@ export default {
         });
       }
     },
-    calculateTotalScore() {
-
-    }
+    calculateTotalScore() {},
   },
 };
 </script>
@@ -214,7 +181,7 @@ export default {
       .el-form-item {
         .el-form-item__content {
           .el-input {
-            width: 20%;
+            width: 40%;
           }
         }
       }

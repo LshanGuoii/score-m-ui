@@ -41,7 +41,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="入学时间" prop="admissionTime">
+        <el-form-item label="入职时间" prop="admissionTime">
           <el-date-picker
             v-model="teaForm.admissionTime"
             type="date"
@@ -82,9 +82,9 @@ export default {
   data() {
     return {
       teaForm: {
-        teacherName: "罗赏",
+        teacherName: "",
         sex: null,
-        telphone: "123131231",
+        telphone: "",
         teacherDepartmentId: "",
         admissionTime: "",
       },

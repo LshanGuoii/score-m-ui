@@ -32,16 +32,22 @@ import variables from "@/styles/variables.scss";
 export default {
   components: { SidebarItem, Logo },
   computed: {
-    ...mapGetters(["sidebar"]),
+    ...mapGetters(["sidebar", "userInfo"]),
+
     routes() {
-      console.log('[ this.$router.options.routes ]-38', this.$router.options.routes);
-      // const routes =  this.$router.options.routes.map(item =>{
-      //     if(item.meta.type === '' || item.meta.type === undefined){
-      //   return item
-      //     }
-      //   })
-      //   })
-      const routes = this.$router.options.routes
+      const route = this.$router.options.routes;
+      const routes = route.filter((item) => {
+        if (
+          item?.meta?.type === this.userInfo.role ||
+          item?.meta?.type === undefined
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      // })
+      // const routes = this.$router.options.routes;
       return routes;
     },
     activeMenu() {

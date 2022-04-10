@@ -73,11 +73,11 @@ export default {
   data() {
     return {
       stuForm: {
-        name: "罗赏",
+        name: "",
         sex: null,
-        phone: "123131231",
-        cardNum: "1244444",
-        address: "混啊",
+        phone: "",
+        cardNum: "",
+        address: "",
         classId: "",
         entranceTime: "",
       },
@@ -149,7 +149,7 @@ export default {
           console.log("error submit!!");
           return false;
         }
-      }); 
+      });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

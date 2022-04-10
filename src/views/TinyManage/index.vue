@@ -38,6 +38,8 @@
       <el-table-column prop="departmentName" label="系部" />
       <el-table-column prop="specializeName" label="专业" />
       <el-table-column prop="className" label="班级" />
+      <el-table-column prop="num" label="人数" />
+
       <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <!-- <el-button

@@ -8,10 +8,11 @@
               <el-select
                 v-model="tableFilter.entered"
                 placeholder="请选择状态"
+                clearable
                 @change="getList()"
               >
-                <el-option label="未录入" :value="1"></el-option>
-                <el-option label="已录入" :value="0"></el-option>
+                <el-option label="未录入" :value="0"></el-option>
+                <el-option label="已录入" :value="1"></el-option>
               </el-select>
             </el-form-item>
             <!-- <el-form-item>
@@ -74,7 +75,11 @@
       <el-table-column prop="taskScore" label="入学时间" />
       <el-table-column prop="experimentScore" label="入学时间" />
       <el-table-column prop="otherScore" label="入学时间" /> -->
-      <el-table-column prop="totalScore" sortable label="总成绩" />
+      <el-table-column prop="totalScore" sortable label="总成绩">
+        <template slot-scope="scope">
+          <span>{{ scope.row.totalScore ? scope.row.totalScore : "--" }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="entered" label="状态">
         <template slot-scope="scope">
           <span>{{ scope.row.entered ? "已录入" : "未录入" }}</span>
@@ -101,6 +106,12 @@
             @click="handleClick(scope.row)"
             >录入</el-button
           >
+          <el-button
+            v-else
+            type="text"
+            size="small"
+            @click="handleClick(scope.row)"
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -145,19 +156,31 @@ export default {
   mounted() {},
   methods: {
     getList() {
-      const { classId } = this.$route.query;
+      const { classId, courseId } = this.$route.query;
+      console.log("[ this.$route.query ]-159", this.$route.query);
+
       this.loading = true;
       let params = {
         classId: classId,
-        // ...this.tableFilter,
+        courseId: courseId,
+        ...this.tableFilter,
         ...this.pageInit,
       };
       api.getTinyList(params).then((res) => {
         console.log("[ res ]-111", res);
-        this.tableData = res.rows;
-        this.tableData.term = this.$route.query.term;
-        this.tableData.year = this.$route.query.year;
-        this.tableData.courseId = this.$route.query.courseId;
+        //  = res.rows;
+        this.tableData = res.rows.map((item) => {
+          console.log("[ item ]-160", item);
+          this.$set(item, "term", this.$route.query.term);
+          this.$set(item, "year", this.$route.query.year);
+          this.$set(item, "courseId", this.$route.query.courseId);
+          return item;
+        });
+        console.log("[ this.tableData ]-162", this.tableData);
+
+        // this.tableData.term = this.$route.query.term;
+        // this.tableData.year = this.$route.query.year;
+        // this.tableData.courseId = this.$route.query.courseId;
         this.pageInit.total = res.total;
         this.loading = false;
       });

@@ -22,7 +22,7 @@ import Layout from '@/layout'
     icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
     breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-    type: 1 / 2/ 3 1-admin,2-teacher,3-student
+    type: 1 / 2/ 3 0-admin,1-teacher, 2-student
   }
  */
 
@@ -63,32 +63,35 @@ export const constantRoutes = [
       path: '/person-info',
       name: 'PersonInfo',
       component: () => import('@/views/PersonInfo'),
-      meta: { title: '个人信息', icon: 'dashboard' }
+      meta: { title: '个人信息', icon: 'user' }
     }]
   },
-  // {
-  //   path: '/user-manage',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '/user-manage',
-  //       name: 'UserManage',
-  //       component: () => import('@/views/UserManage'),
-  //       meta: { title: '用户管理', icon: 'form' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/tiny-info',
+    component: Layout,
+    meta: { type: 2 },
+    children: [
+      {
+        path: '/tiny-info',
+        name: 'TinyInfo',
+        component: () => import('@/views/TinyInfo'),
+        meta: { title: '成绩信息', icon: 'form' }
+      }
+    ]
+  },
   {
     path: '/tiny-manage',
     component: Layout,
     // alwaysShow: true,
+    meta: { type: 1 },
+
     children: [
       {
         path: '/tiny-manage',
         name: 'TinyManage',
 
         component: () => import('@/views/TinyManage'),
-        meta: { title: '成绩管理', icon: 'form',type:2 },
+        meta: { title: '成绩管理', icon: 'form', type: 2 },
         // children: [
 
         // ]
@@ -98,7 +101,7 @@ export const constantRoutes = [
         name: 'resultList',
         hidden: true,
         component: () => import('@/views/TinyManage/resultList'),
-        meta: { title: '学生成绩详情', icon: 'form',type:2  }
+        meta: { title: '学生成绩详情', icon: 'form', type: 2 }
       }
     ]
   },
@@ -117,24 +120,26 @@ export const constantRoutes = [
   {
     path: '/course-manage',
     component: Layout,
+    meta: { type: 0 },
     children: [
       {
         path: '/course-manage',
         name: 'CourseManage',
         component: () => import('@/views/CourseManage'),
-        meta: { title: '课程管理', icon: 'form',type:1 }
+        meta: { title: '课程管理', icon: 'form' }
       }
     ]
   },
   {
     path: '/teaching-manage',
     component: Layout,
+    meta: { type: 0 },
     children: [
       {
         path: '/teaching-manage',
         name: 'TeachingManage',
         component: () => import('@/views/TeachingManage'),
-        meta: { title: '授课管理', icon: 'form',type:1 }
+        meta: { title: '授课管理', icon: 'form', }
       }
     ]
   },
@@ -142,31 +147,33 @@ export const constantRoutes = [
   {
     path: '/teacher-manage',
     component: Layout,
+    meta: { type: 0 },
     children: [
       {
         path: '/teacher-manage',
         name: 'TeacherManage',
         component: () => import('@/views/TeacherManage'),
-        meta: { title: '教师管理', icon: 'form',type:1  }
+        meta: { title: '教师管理', icon: 'form', }
       }
     ]
   },
   {
     path: '/student-manage',
     component: Layout,
+    meta: { type: 0 },
     children: [
       {
         path: '/student-manage',
         name: 'StudentManage',
         component: () => import('@/views/StudentManage'),
-        meta: { title: '学生管理', icon: 'form',type:1  }
+        meta: { title: '学生管理', icon: 'form', }
       }
     ]
   },
   {
     path: '/student',
     redirect: 'dep-manage',
-    meta: { title: '配置管理', icon: 'form',type:1  },
+    meta: { title: '配置管理', icon: 'form', type: 0 },
     component: Layout,
     children: [
       {
@@ -189,117 +196,128 @@ export const constantRoutes = [
       }
     ]
   },
+  // {
+  //   path: '/nested',
+  //   component: Layout,
+  //   redirect: '/nested/menu1',
+  //   name: 'Nested',
+  //   meta: {
+  //     title: 'Nested',
+  //     icon: 'nested'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'menu1',
+  //       component: () => import('@/views/nested/menu1/index'), // Parent router-view
+  //       name: 'Menu1',
+  //       meta: { title: 'Menu1' },
+  //       children: [
+  //         {
+  //           path: 'menu1-1',
+  //           component: () => import('@/views/nested/menu1/menu1-1'),
+  //           name: 'Menu1-1',
+  //           meta: { title: 'Menu1-1' }
+  //         },
+  //         {
+  //           path: 'menu1-2',
+  //           component: () => import('@/views/nested/menu1/menu1-2'),
+  //           name: 'Menu1-2',
+  //           meta: { title: 'Menu1-2' },
+  //           children: [
+  //             {
+  //               path: 'menu1-2-1',
+  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
+  //               name: 'Menu1-2-1',
+  //               meta: { title: 'Menu1-2-1' }
+  //             },
+  //             {
+  //               path: 'menu1-2-2',
+  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
+  //               name: 'Menu1-2-2',
+  //               meta: { title: 'Menu1-2-2' }
+  //             }
+  //           ]
+  //         },
+  //         {
+  //           path: 'menu1-3',
+  //           component: () => import('@/views/nested/menu1/menu1-3'),
+  //           name: 'Menu1-3',
+  //           meta: { title: 'Menu1-3' }
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       path: 'menu2',
+  //       component: () => import('@/views/nested/menu2/index'),
+  //       name: 'Menu2',
+  //       meta: { title: 'menu2' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/pdf',
+  //   component: Layout,
+  //   redirect: '/pdf/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/pdf/index'),
+  //       name: 'PDF',
+  //       meta: { title: 'PDF', icon: 'pdf' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/pdf/download',
+  //   component: () => import('@/views/pdf/download'),
+  //   hidden: true
+  // },
+  // {
+  //   path: '/excel',
+  //   component: Layout,
+  //   redirect: '/excel/export-excel',
+  //   name: 'Excel',
+  //   meta: {
+  //     title: 'Excel',
+  //     icon: 'excel'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'export-excel',
+  //       component: () => import('@/views/excel/export-excel'),
+  //       name: 'ExportExcel',
+  //       meta: { title: 'Export Excel' }
+  //     },
+  //     {
+  //       path: 'export-selected-excel',
+  //       component: () => import('@/views/excel/select-excel'),
+  //       name: 'SelectExcel',
+  //       meta: { title: 'Export Selected' }
+  //     },
+  //     {
+  //       path: 'export-merge-header',
+  //       component: () => import('@/views/excel/merge-header'),
+  //       name: 'MergeHeader',
+  //       meta: { title: 'Merge Header' }
+  //     },
+  //     {
+  //       path: 'upload-excel',
+  //       component: () => import('@/views/excel/upload-excel'),
+  //       name: 'UploadExcel',
+  //       meta: { title: 'Upload Excel' }
+  //     }
+  //   ]
+  // },
   {
-    path: '/nested',
+    path: '/log-manage',
     component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-  {
-    path: '/pdf',
-    component: Layout,
-    redirect: '/pdf/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/pdf/index'),
-        name: 'PDF',
-        meta: { title: 'PDF', icon: 'pdf' }
-      }
-    ]
-  },
-  {
-    path: '/pdf/download',
-    component: () => import('@/views/pdf/download'),
-    hidden: true
-  },
-  {
-    path: '/excel',
-    component: Layout,
-    redirect: '/excel/export-excel',
-    name: 'Excel',
-    meta: {
-      title: 'Excel',
-      icon: 'excel'
-    },
-    children: [
-      {
-        path: 'export-excel',
-        component: () => import('@/views/excel/export-excel'),
-        name: 'ExportExcel',
-        meta: { title: 'Export Excel' }
-      },
-      {
-        path: 'export-selected-excel',
-        component: () => import('@/views/excel/select-excel'),
-        name: 'SelectExcel',
-        meta: { title: 'Export Selected' }
-      },
-      {
-        path: 'export-merge-header',
-        component: () => import('@/views/excel/merge-header'),
-        name: 'MergeHeader',
-        meta: { title: 'Merge Header' }
-      },
-      {
-        path: 'upload-excel',
-        component: () => import('@/views/excel/upload-excel'),
-        name: 'UploadExcel',
-        meta: { title: 'Upload Excel' }
-      }
-    ]
+    meta: { type: 0 },
+    children: [{
+      path: '/log-manage',
+      name: 'LogManage',
+      component: () => import('@/views/LogManage'),
+      meta: { title: '日志管理', icon: 'dashboard' }
+    }]
   },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

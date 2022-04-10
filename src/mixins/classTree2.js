@@ -21,8 +21,8 @@ const classTree = {
           resolve()
         }
         return api.getDepartmentList({
-          pageSize: 10000,
-          ...params
+          ...params,
+          ...this.pageInit
         }).then((res) => {
 
           this.depList = res.rows
@@ -40,8 +40,8 @@ const classTree = {
           resolve()
         }
         return api.getSpList({
-          pageSize: 10000,
-          ...params
+          ...params,
+          ...this.pageInit
         }).then((res) => {
           this.speList = res.rows
           this.pageInit.total = res.total;
@@ -56,8 +56,8 @@ const classTree = {
         this.classList = JSON.parse(sessionStorage.getItem('classObj'))
       }
       api.getClassList({
-        pageSize: 10000,
-        ...params
+        ...params,
+        ...this.pageInit
       }).then((res) => {
         this.classList = res.rows
         this.pageInit.total = res.total;

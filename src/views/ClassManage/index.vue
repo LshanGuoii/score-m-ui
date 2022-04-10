@@ -110,7 +110,7 @@
 <script>
 import From from "./From.vue";
 import * as api from "@/api/config";
-import classMixin from "@/mixins/classTree";
+import classMixin from "@/mixins/classTree2";
 
 export default {
   name: "DepManage",

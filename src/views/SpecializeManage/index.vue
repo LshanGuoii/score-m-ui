@@ -14,6 +14,7 @@
               <el-select
                 v-model="tableFilter.departmentId"
                 placeholder="请选择系部"
+                clearable
               >
                 <el-option
                   v-for="(item, index) in depList"
@@ -116,7 +117,7 @@
 <script>
 import From from "./From.vue";
 import * as api from "@/api/config";
-import classMixin from "@/mixins/classTree";
+import classMixin from "@/mixins/classTree2";
 
 export default {
   name: "DepManage",

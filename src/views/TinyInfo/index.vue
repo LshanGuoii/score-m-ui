@@ -3,12 +3,39 @@
     <div>
       <div class="flex">
         <div>
+          <el-form inline style="width: 100%">
+            <el-form-item label="学期选择">
+              <el-select
+                v-model="tableFilter.term"
+                placeholder="请选择学期"
+                clearable
+                @change="getList"
+              >
+                <el-option label="上学期" :value="0">上学期</el-option>
+                <el-option label="下学期" :value="1">下学期</el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="年份选择" prop="year">
+              <el-date-picker
+                v-model="tableFilter.year"
+                type="year"
+                value-format="yyyy"
+                placeholder="选择日期"
+                @change="getList"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <div>
+                <el-button type="primary" @click="exportPdfClick()"
+                  >打印成绩单</el-button
+                >
+              </div>
+            </el-form-item>
+          </el-form>
         </div>
       </div>
-       <div class="head-button">
-        <div>
-          <el-button type="primary" @click="exportClick()">打印成绩单</el-button>
-        </div>
+      <div class="head-button">
         <div class="right"></div>
       </div>
     </div>
@@ -55,44 +82,64 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { blobDownload } from "@/utils";
+
 import * as api from "@/api/tiny";
 export default {
-  name: "TinyManage",
+  name: "TinyInfo",
 
-  components: {  },
+  components: {},
   data() {
     return {
       TinyMessage: {},
-      stuId: "",
-      tableFilter: {},
+      tableFilter: {
+        term: "",
+        year: "",
+      },
       tableData: [],
       selectIds: [],
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["userInfo"]),
+  },
   created() {
     this.getList();
   },
   mounted() {},
   methods: {
     getList() {
-      const { classId, departmentId, specializeId } = this.tableFilter;
       this.loading = true;
+      console.log("[ this.userInfo ]-87", this.userInfo);
       let params = {
         ...this.pageInit,
-        
-        stuId: "",
+        stuNum: this.userInfo.username,
+        entered: 1,
+        year: this.tableFilter.year,
+        term: this.tableFilter.term,
       };
-      api.getTinyByStuId(params).then((res) => {
+      // getTinyByStuId
+      api.getTinyList(params).then((res) => {
         console.log("[ res ]-111", res);
         this.tableData = res.rows;
+        console.log("[ this.tableData ]-92", this.tableData);
         this.pageInit.total = res.total;
         this.loading = false;
       });
     },
-    handleClick(item) {
+    handleClick(item) {},
+    exportPdfClick() {
+      let params = {
+        ...this.tableFilter,
+        stuNum: this.userInfo.username,
+        isExport: true,
+      };
+      api.getTinyPdf(params).then((res) => {
+        console.log("[ res ]-99", res);
+        blobDownload(res.data, `${this.userInfo.username}成绩单`, "pdf");
+      });
     },
-
     handleSelectionChange(val) {
       this.selectIds = val.map((item) => item.id);
     },

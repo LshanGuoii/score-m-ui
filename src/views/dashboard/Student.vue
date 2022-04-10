@@ -5,7 +5,7 @@
         <img class="item-img" src="@/assets/situation-1.png" />
         <div class="item-title">成绩信息</div>
       </div>
-      <div class="item-div" @click="hanleNavigation(2)">
+      <!-- <div class="item-div" @click="hanleNavigation(2)">
         <img class="item-img" src="@/assets/situation-2.png" />
         <div class="item-title">老师管理</div>
       </div>
@@ -16,40 +16,18 @@
       <div class="item-div" @click="hanleNavigation(4)">
         <img class="item-img" src="@/assets/situation-4.png" />
         <div class="item-title">院系设置管理</div>
-        <!-- <div class="item-tip">（未开放）</div> -->
       </div>
       <div class="item-div" @click="hanleNavigation(5)">
         <img class="item-img" src="@/assets/situation-5.png" />
         <div class="item-title">授课管理</div>
-        <!-- <div class="item-tip">（未开放）</div> -->
-      </div>
-
+      </div> -->
     </div>
     <div class="situation-content">
-      <div class="content-left">
-        <div v-loading="loading1" class="content-exam">
-          <div class="content-title" style="margin-bottom:8px">已发布的考试</div>
-          <div v-for="(item, index) in examList" :key="index" class="exam-item">
-            <span
-              class="exam-name"
-              @click="$router.push({ name: 'ExamList' })"
-            >{{ item.examName | textOverFilter(20) }}</span>
-            <span class="exam-time">{{ item.createTime }}</span>
-          </div>
+      <div v-loading="loading1" class="content-exam">
+        <div class="content-title" style="margin-bottom: 8px">
+          下午好~ {{ userInfo.name }}
         </div>
-        <div v-loading="loading2" class="content-link">
-          <div class="content-title">学员登录考试系统链接</div>
-          <div class="link-url">URL：{{ dataUrl.dataDksUrl }}</div>
-          <div style="text-align:center;">
-            <el-button
-              v-clipboard:copy="dataUrl.dataDksUrl"
-              v-clipboard:success="onCopy"
-              v-clipboard:error="onError"
-              type="primary"
-              size="large"
-            >复制链接</el-button>
-          </div>
-        </div>
+        <div></div>
       </div>
 
       <div class="content-right">
@@ -77,7 +55,7 @@
         <div v-loading="loading4" class="exam-info">
           <div>
             <span class="content-title">在线考试参考人数</span>
-            <span style="font-size:12px;color:#A0A1A2">（最近1年数据）</span>
+            <span style="font-size: 12px; color: #a0a1a2">（最近1年数据）</span>
           </div>
           <div>
             <barChart
@@ -94,25 +72,31 @@
 </template>
 
 <script>
-import barChart from './barChart'
-import Admin from './Admin.vue'
-import Student from './Student.vue'
-import Teacher from './Teacher.vue'
+import barChart from "./barChart";
+import Admin from "./Admin.vue";
+import Student from "./Student.vue";
+import Teacher from "./Teacher.vue";
 
 // import * as api from '@/api'
 
 export default {
-  name: 'Dashboard',
+  name: "Dashboard",
   components: {
     Admin,
     Student,
     Teacher,
-    barChart
+    barChart,
+  },
+  props: {
+    userInfo: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
       optionRevenueBar: {},
-      dataUrl: '',
+      dataUrl: "",
       examList: [], // 考试列表
       loading1: false, // 考试列表
       loading2: false, // 链接
@@ -122,9 +106,9 @@ export default {
         tkCount: 0,
         tpCount: 0,
         oeCount: 0,
-        examCount: 0
-      } // 看板数据
-    }
+        examCount: 0,
+      }, // 看板数据
+    };
   },
   created() {
     // this.getData()
@@ -136,58 +120,58 @@ export default {
   },
   methods: {
     getData() {
-      this.loading1 = true
-      this.loading2 = true
-      this.loading3 = true
-      this.loading4 = true
+      this.loading1 = true;
+      this.loading2 = true;
+      this.loading3 = true;
+      this.loading4 = true;
       api.default.home
         .getHomeExamList()
-        .then(res => {
-          this.examList = res
-          this.loading1 = false
+        .then((res) => {
+          this.examList = res;
+          this.loading1 = false;
         })
         .catch(() => {
-          this.loading1 = false
-        })
+          this.loading1 = false;
+        });
       api.default.home
         .getHomeStatistics()
-        .then(res => {
-          this.boardData = res
-          this.loading3 = false
+        .then((res) => {
+          this.boardData = res;
+          this.loading3 = false;
         })
         .catch(() => {
-          this.loading3 = false
-        })
+          this.loading3 = false;
+        });
       api.default.home
         .getHomeDataUrl()
-        .then(res => {
-          this.dataUrl = res
-          this.loading2 = false
+        .then((res) => {
+          this.dataUrl = res;
+          this.loading2 = false;
         })
         .catch(() => {
-          this.loading2 = false
-        })
+          this.loading2 = false;
+        });
     },
     async getChartData() {
-      this.loading4 = true
+      this.loading4 = true;
       api.default.home
         .getHomeRecentExams({})
-        .then(res => {
-          this.loading4 = false
+        .then((res) => {
+          this.loading4 = false;
           this.optionRevenueBar = {
             // title: `测试sdas`,
             // serieData: { datas: [], xaxis: [] },
             serieData: res,
 
             showLegend: false,
-            type: 'bar',
+            type: "bar",
             // subTitle: '单位（场）',
-            color: '#497EFF'
-          }
+            color: "#497EFF",
+          };
         })
         .catch(() => {
-          this.loading4 = false
-        })
+          this.loading4 = false;
+        });
 
       // this.$nextTick(() => {
       //   this.$refs['exam-bar-echart'].resize()
@@ -196,37 +180,37 @@ export default {
     hanleNavigation(type) {
       switch (type) {
         case 1:
-          this.$router.push({ name: 'StudentManage' })
-          break
+          this.$router.push({ name: "StudentManage" });
+          break;
         case 2:
-          this.$router.push({ name: 'TeacherManage' })
-          break
+          this.$router.push({ name: "TeacherManage" });
+          break;
         case 3:
-          this.$router.push({ name: 'CourseManage' })
-          break
+          this.$router.push({ name: "CourseManage" });
+          break;
         case 4:
-          this.$router.push({ name: 'DepManage' })
+          this.$router.push({ name: "DepManage" });
 
-          break
+          break;
         case 5:
-          this.$router.push({ name: 'TeachingManage' })
+          this.$router.push({ name: "TeachingManage" });
 
-          break
+          break;
         case 6:
-           this.$router.push({ name: 'LogManage' })
+          this.$router.push({ name: "LogManage" });
 
-          break
+          break;
       }
     },
     // 复制
     onCopy: function (e) {
-      this.$message.success('复制成功！')
+      this.$message.success("复制成功！");
     },
     onError: function (e) {
-      this.$message.error('复制失败！')
-    }
-  }
-}
+      this.$message.error("复制失败！");
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .dashboard-container {
@@ -239,7 +223,7 @@ export default {
     border-radius: 3px;
     padding: 44px 0 14px;
     display: flex;
-    justify-content: space-around;
+    // justify-content: space-around;
     .item-div {
       cursor: pointer;
       .item-img {
@@ -361,4 +345,3 @@ export default {
   }
 }
 </style>
- 

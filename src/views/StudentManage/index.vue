@@ -18,11 +18,42 @@
       </div>
       <div class="head-button">
         <div>
+          <el-button type="primary" @click="downEClick()"
+            >下载学生导入模板</el-button
+          >
+          <el-button type="primary" @click="dialogVisible = true"
+            >导入学生</el-button
+          >
+
           <el-button type="primary" @click="handleClick()">新增学生</el-button>
           <el-button type="danger" @click="delClick(selectIds)"
             >批量删除</el-button
           >
           <el-button type="primary" @click="exportClick()">导出</el-button>
+
+          <el-dialog title="上传" :visible.sync="dialogVisible" width="70%">
+            <el-upload
+              class="upload-demo"
+              drag
+              action="/student/importData"
+              multiple
+              :headers="headers"
+            >
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">
+                将文件拖到此处，或<em>点击上传</em>
+              </div>
+              <div class="el-upload__tip" slot="tip">
+                只能上传jpg/png文件，且不超过500kb
+              </div>
+            </el-upload>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="handleClickDialog"
+                >确 定</el-button
+              >
+            </span>
+          </el-dialog>
         </div>
         <div class="right"></div>
       </div>
@@ -86,6 +117,8 @@ import StudentFrom from "./StudentFrom.vue";
 import * as api from "@/api/student";
 import ClassTreeFilter from "./../../components/ClassTreeFilter.vue";
 import { blobDownload } from "@/utils";
+import { getToken } from "@/utils/auth"; // get token from cookie
+
 export default {
   name: "StudentManage",
 
@@ -98,14 +131,24 @@ export default {
       tableFilter: {},
       tableData: [],
       selectIds: [],
+      dialogVisible: false,
     };
   },
-  computed: {},
+  computed: {
+    headers() {
+      return this.configHead();
+    },
+  },
   created() {
     this.getList();
   },
   mounted() {},
   methods: {
+    configHead() {
+      const config = {
+        Authorization: getToken(),
+      };
+    },
     getList() {
       const { classId, departmentId, specializeId } = this.tableFilter;
       this.loading = true;
@@ -169,6 +212,23 @@ export default {
         console.log("[ res ]-163", res);
         blobDownload(res.data, "学生列表");
       });
+    },
+    downEClick() {
+      api.getStudentImportTemplate({ isExport: true }).then((res) => {
+        console.log("[ res ]-201", res);
+        blobDownload(res.data, "学生模板");
+      });
+    },
+    importClick() {
+      // api.getStudentImportData().then((res) => {
+      //   this.getList();
+      //   this.dialogVisible = false;
+      // });
+    },
+    handleClickDialog() {
+      // this.importClick();
+      this.getList();
+      this.dialogVisible = false;
     },
   },
 };

@@ -135,6 +135,7 @@ export default {
       });
     },
     handleClick(item) {
+      console.log("[ item ]-138", item);
       this.studentMessage = item;
       this.showDialog = true;
       localStorage.removeItem("depObj");

@@ -7,7 +7,8 @@ import { getToken } from '@/utils/auth'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 10000 // request timeout
+  timeout: 10000, // request timeout
+
 })
 
 // request interceptor
@@ -17,8 +18,6 @@ service.interceptors.request.use(
     // do something before request is sent
     // 文件流下载标识
     if (config.data && config.data.isExport) {
-      console.log('[ config.data.isExport ]-20', config.data.isExport)
-      console.log('[ config.responseType ]-22', config.responseType)
       config.responseType = 'blob'
 
       config.headers['isExport'] = true

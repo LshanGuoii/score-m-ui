@@ -24,7 +24,7 @@ export function getTinyAdd(data) {
 export function getTinyUpdate(data) {
   return request({
     url: `/tiny/update`,
-    method: 'get',
+    method: 'post',
     data
   })
 }
@@ -49,4 +49,12 @@ export function getTinyExport(data) {
     data
   })
 }
+export function getTinyPdf(data) {
+  return request({
+    url: `/tiny/pdf`,
+    method: 'post',
+    data
+  })
+}
+
 

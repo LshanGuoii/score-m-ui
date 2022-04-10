@@ -59,7 +59,7 @@
 
 <script>
 import * as api from "@/api/config";
-import classMixin from "@/mixins/classTree";
+import classMixin from "@/mixins/classTree2";
 
 export default {
   name: "StudentFrom",
@@ -100,7 +100,7 @@ export default {
   async created() {
     await this.getDepartmentList();
 
-    if (JSON.stringify(this.fromData) == "{}") {
+    if (this.fromData) {
       console.log("[ this.fromData ]-103", this.fromData);
       await this.getSpList({ departmentId: this.fromData.departmentId });
       this.type = 1;

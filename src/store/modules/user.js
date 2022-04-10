@@ -54,7 +54,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-        console.log('[ data ]-57', data)
 
         // if (!data) {
         //   return reject('Verification failed, please Login again.')
@@ -62,6 +61,7 @@ const actions = {
 
 
         commit('SET_USERINFO', data)
+        console.log('[ data ]-65', data)
         commit('SET_AVATAR', data.photo)
         resolve(data)
       }).catch(error => {
