@@ -57,4 +57,22 @@ export function getTinyPdf(data) {
   })
 }
 
-
+export function getSelectNumByCourseId(courseId) {
+  return request({
+    url: `/tiny/selectNumByCourseId/${courseId}`,
+    method: 'get',
+  })
+}
+export function getSelectStuOfCourseScoreByStuId(data) {
+  return request({
+    url: `/tiny/selectStuOfCourseScoreByStuId`,
+    method: 'post',
+    data
+  })
+}
+export function getSelectUnEnteredByTeacherName(teacherName) {
+  return request({
+    url: `/tiny/selectUnEnteredByTeacherName/${teacherName}`,
+    method: 'get',
+  })
+}

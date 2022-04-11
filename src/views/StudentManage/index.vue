@@ -157,7 +157,7 @@ export default {
         classId: classId,
         departmentId: departmentId,
         specializeId: specializeId,
-        stuId: "",
+        stuId: this.stuId,
       };
       api.getStudentList(params).then((res) => {
         console.log("[ res ]-111", res);

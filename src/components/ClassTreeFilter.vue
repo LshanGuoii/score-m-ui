@@ -130,6 +130,7 @@ export default {
 <style lang="scss" scoped>
 .from-flex {
   display: inline-block;
+  width: 100%;
   ::v-deep {
     .el-form-item {
       display: inline-block;

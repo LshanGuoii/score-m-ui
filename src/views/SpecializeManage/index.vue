@@ -24,7 +24,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item>
+            <!-- <el-form-item>
               <el-input
                 v-model="tableFilter.search"
                 clearable
@@ -38,7 +38,7 @@
                   @click="getList()"
                 />
               </el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
               <el-button type="primary" @click="handleClick()"
                 >新增专业

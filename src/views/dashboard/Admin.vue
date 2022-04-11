@@ -28,7 +28,7 @@
         <div class="item-title">日志管理</div>
       </div>
     </div>
-    <div class="situation-content">
+    <!-- <div class="situation-content">
       <div class="content-left">
         <div v-loading="loading1" class="content-exam">
           <div class="content-title" style="margin-bottom: 8px">
@@ -89,7 +89,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

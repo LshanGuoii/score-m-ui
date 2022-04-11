@@ -32,22 +32,30 @@
             </el-form-item> -->
           </el-form>
         </div>
-        <div>
-          <el-input
-            v-model="stuId"
-            clearable
-            placeholder="请输入学号"
-            style="width: 340px"
-          >
-            <el-button slot="append" icon="el-icon-search" @click="getList()" />
-          </el-input>
+        <div class="head-button">
+          <div>
+            <el-button type="primary" @click="exportClick()">导出</el-button>
+          </div>
+          <div style="margin-right: 10px">
+            <el-popover
+              placement="bottom-end"
+              title="标题"
+              width="500"
+              trigger="hover"
+            >
+              <barChart
+                ref="exam-bar-echart"
+                name="exam-bar-echart"
+                class="echart"
+                :option="optionRevenueBar"
+              />
+              <el-button slot="reference" type="primary" @click=""
+                >查看分段统计</el-button
+              >
+            </el-popover>
+          </div>
+          <div class="right"></div>
         </div>
-      </div>
-      <div class="head-button">
-        <div>
-          <el-button type="primary" @click="exportClick()">导出</el-button>
-        </div>
-        <div class="right"></div>
       </div>
     </div>
     <el-table
@@ -132,6 +140,7 @@
 import From from "./From.vue";
 import * as api from "@/api/tiny";
 import { blobDownload } from "@/utils";
+import barChart from "./../dashboard/barChart.vue";
 export default {
   name: "TinyManage",
 
@@ -145,6 +154,7 @@ export default {
         entered: null,
       },
       tableData: [],
+      optionRevenueBar: {},
       selectIds: [],
     };
   },
@@ -152,6 +162,7 @@ export default {
   created() {
     console.log("[ this.$router ]-143", this.$route);
     this.getList();
+    this.echartData();
   },
   mounted() {},
   methods: {
@@ -205,11 +216,36 @@ export default {
         blobDownload(res.data, "学生成绩列表");
       });
     },
+    echartData() {
+      const { courseId } = this.$route.query;
+      api.getSelectNumByCourseId(courseId).then((res) => {
+        console.log("[ res ]-121", res);
+        this.optionRevenueBar = {
+          // title: `测试sdas`,
+          // serieData: { datas: [], xaxis: [] },
+          serieData: res,
+
+          showLegend: false,
+          type: "bar",
+          // subTitle: '单位（场）',
+          color: "#497EFF",
+        };
+      });
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .user-message {
+  .echart {
+    width: 100%;
+    height: 300px;
+
+    &.noTab {
+      width: 100%;
+      height: 360px;
+    }
+  }
   .flex {
     display: flex;
     justify-content: space-between;

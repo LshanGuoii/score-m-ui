@@ -19,7 +19,7 @@
           <router-link to="/">
             <el-dropdown-item> 回到主页 </el-dropdown-item>
           </router-link>
-          <router-link to="/">
+          <router-link to="/person-info">
             <el-dropdown-item> 个人信息 </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided @click.native="logout">

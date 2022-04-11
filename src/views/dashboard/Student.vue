@@ -3,35 +3,23 @@
     <div class="situation-head">
       <div class="item-div" @click="hanleNavigation(1)">
         <img class="item-img" src="@/assets/situation-1.png" />
+        <div class="item-title">个人信息</div>
+      </div>
+      <div class="item-div" @click="hanleNavigation(1)">
+        <img class="item-img" src="@/assets/situation-2.png" />
         <div class="item-title">成绩信息</div>
       </div>
-      <!-- <div class="item-div" @click="hanleNavigation(2)">
-        <img class="item-img" src="@/assets/situation-2.png" />
-        <div class="item-title">老师管理</div>
-      </div>
-      <div class="item-div" @click="hanleNavigation(3)">
-        <img class="item-img" src="@/assets/situation-3.png" />
-        <div class="item-title">课程管理</div>
-      </div>
-      <div class="item-div" @click="hanleNavigation(4)">
-        <img class="item-img" src="@/assets/situation-4.png" />
-        <div class="item-title">院系设置管理</div>
-      </div>
-      <div class="item-div" @click="hanleNavigation(5)">
-        <img class="item-img" src="@/assets/situation-5.png" />
-        <div class="item-title">授课管理</div>
-      </div> -->
     </div>
     <div class="situation-content">
-      <div v-loading="loading1" class="content-exam">
+      <!-- <div class="content-exam">
         <div class="content-title" style="margin-bottom: 8px">
           下午好~ {{ userInfo.name }}
         </div>
         <div></div>
-      </div>
+      </div> -->
 
       <div class="content-right">
-        <div v-loading="loading3" class="data-board">
+        <!-- <div class="data-board">
           <div class="content-title">数据看板</div>
           <div class="board-content">
             <div class="board-item">
@@ -51,13 +39,37 @@
               <div class="board-title">在线考试总次数</div>
             </div>
           </div>
-        </div>
-        <div v-loading="loading4" class="exam-info">
+        </div> -->
+        <div class="exam-info">
           <div>
-            <span class="content-title">在线考试参考人数</span>
-            <span style="font-size: 12px; color: #a0a1a2">（最近1年数据）</span>
+            <span class="content-title">课程成绩分布：</span>
           </div>
-          <div>
+          <el-form inline style="width: 100%">
+            <el-form-item> </el-form-item>
+
+            <el-form-item label="学年选择" prop="year">
+              <el-date-picker
+                v-model="tableFilter.year"
+                type="year"
+                value-format="yyyy"
+                placeholder="选择日期"
+                @change="getEchart"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="学期选择">
+              <el-select
+                v-model="tableFilter.term"
+                placeholder="请选择学期"
+                clearable
+                @change="getEchart"
+              >
+                <el-option label="上学期" :value="0">上学期</el-option>
+                <el-option label="下学期" :value="1">下学期</el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <div style="width: 100%">
             <barChart
               ref="exam-bar-echart"
               name="exam-bar-echart"
@@ -68,23 +80,52 @@
         </div>
       </div>
     </div>
+    <!-- <div class="exam-info">
+      <el-form inline style="width: 100%">
+        <el-form-item> </el-form-item>
+
+        <el-form-item label="学年选择" prop="year">
+          <el-date-picker
+            v-model="tableFilter.year"
+            type="year"
+            value-format="yyyy"
+            placeholder="选择日期"
+            @change="getEchart"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="学期选择">
+          <el-select
+            v-model="tableFilter.term"
+            placeholder="请选择学期"
+            clearable
+            @change="getEchart"
+          >
+            <el-option label="上学期" :value="0">上学期</el-option>
+            <el-option label="下学期" :value="1">下学期</el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div style="width: 50%">
+        <barChart
+          ref="exam-bar-echart"
+          name="exam-bar-echart"
+          class="echart"
+          :option="optionRevenueBar"
+        />
+      </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import barChart from "./barChart";
-import Admin from "./Admin.vue";
-import Student from "./Student.vue";
-import Teacher from "./Teacher.vue";
 
-// import * as api from '@/api'
+import * as api from "@/api/tiny";
 
 export default {
   name: "Dashboard",
   components: {
-    Admin,
-    Student,
-    Teacher,
     barChart,
   },
   props: {
@@ -95,13 +136,21 @@ export default {
   },
   data() {
     return {
-      optionRevenueBar: {},
+      echartCourseId: "",
+      courseList: [],
+      optionRevenueBar: {
+        serieData: { datas: [], xaxis: [] },
+        showLegend: false,
+        type: "bar",
+        // subTitle: '单位（场）',
+        color: "#497EFF",
+      },
       dataUrl: "",
       examList: [], // 考试列表
-      loading1: false, // 考试列表
-      loading2: false, // 链接
-      loading3: false, // 画板
-      loading4: false, // echarts
+      tableFilter: {
+        term: "",
+        year: "",
+      },
       boardData: {
         tkCount: 0,
         tpCount: 0,
@@ -111,7 +160,8 @@ export default {
     };
   },
   created() {
-    // this.getData()
+    this.getData();
+    this.getEchart();
   },
   mounted() {
     // this.$nextTick(() => {
@@ -120,62 +170,15 @@ export default {
   },
   methods: {
     getData() {
-      this.loading1 = true;
-      this.loading2 = true;
-      this.loading3 = true;
-      this.loading4 = true;
-      api.default.home
-        .getHomeExamList()
-        .then((res) => {
-          this.examList = res;
-          this.loading1 = false;
-        })
-        .catch(() => {
-          this.loading1 = false;
-        });
-      api.default.home
-        .getHomeStatistics()
-        .then((res) => {
-          this.boardData = res;
-          this.loading3 = false;
-        })
-        .catch(() => {
-          this.loading3 = false;
-        });
-      api.default.home
-        .getHomeDataUrl()
-        .then((res) => {
-          this.dataUrl = res;
-          this.loading2 = false;
-        })
-        .catch(() => {
-          this.loading2 = false;
-        });
-    },
-    async getChartData() {
-      this.loading4 = true;
-      api.default.home
-        .getHomeRecentExams({})
-        .then((res) => {
-          this.loading4 = false;
-          this.optionRevenueBar = {
-            // title: `测试sdas`,
-            // serieData: { datas: [], xaxis: [] },
-            serieData: res,
+      console.log(this.userInfo);
 
-            showLegend: false,
-            type: "bar",
-            // subTitle: '单位（场）',
-            color: "#497EFF",
-          };
-        })
-        .catch(() => {
-          this.loading4 = false;
-        });
-
-      // this.$nextTick(() => {
-      //   this.$refs['exam-bar-echart'].resize()
-      // })
+      // let params = {
+      //   pageSize: 10000,
+      // };
+      // api.getCruRoleTeacherYoung(params).then((res) => {
+      //   console.log("[ res ]-111", res);
+      //   this.courseList = res.rows;
+      // });
     },
     hanleNavigation(type) {
       switch (type) {
@@ -208,6 +211,35 @@ export default {
     },
     onError: function (e) {
       this.$message.error("复制失败！");
+    },
+    getEchart() {
+      if (this.tableFilter.term === "" || this.tableFilter.year === "") return;
+      console.log("[ this.tableFilter.term  ]-175", this.tableFilter.term);
+      let params = {
+        stuId: this.userInfo.username,
+        // stuId: 20,
+
+        term: this.tableFilter.term + "",
+        year: this.tableFilter.year,
+      };
+
+      api.getSelectStuOfCourseScoreByStuId(params).then((res) => {
+        console.log("[ res ]-121", res);
+
+        this.optionRevenueBar = {
+          // title: `测试sdas`,
+          // serieData: { datas: [], xaxis: [] },
+          serieData: {
+            datas: res?.data?.value ? res.data.value : [],
+            xaxis: res?.data?.name ? res.data.name : [],
+          },
+
+          showLegend: false,
+          type: "bar",
+          // subTitle: '单位（场）',
+          color: "#497EFF",
+        };
+      });
     },
   },
 };
@@ -324,22 +356,22 @@ export default {
           }
         }
       }
-      .exam-info {
-        margin-top: 10px;
-        margin-left: 10px;
-        background-color: #fff;
-        border-radius: 3px;
-        padding: 20px;
-        height: 368px;
-        .echart {
-          width: 100%;
-          height: 300px;
+    }
+  }
+  .exam-info {
+    margin-top: 10px;
+    margin-left: 10px;
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 20px;
+    height: 368px;
+    .echart {
+      width: 100%;
+      height: 300px;
 
-          &.noTab {
-            width: 100%;
-            height: 360px;
-          }
-        }
+      &.noTab {
+        width: 100%;
+        height: 360px;
       }
     }
   }

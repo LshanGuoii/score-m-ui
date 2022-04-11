@@ -2,10 +2,21 @@
   <div class="app-container user-message">
     <div>
       <div class="flex">
-        <div>
-          <ClassTreeFilter @update="tableFilterUpdate" />
+        <ClassTreeFilter @update="tableFilterUpdate" />
+        <div class="head-button">
+          <div>
+            <el-button type="primary" @click="handleClick()"
+              >授课绑定</el-button
+            >
+            <el-button type="danger" @click="delClick(selectIds)"
+              >批量删除</el-button
+            >
+            <el-button type="primary" @click="exportClick()">导出</el-button>
+          </div>
+          <div class="right"></div>
         </div>
-        <div>
+
+        <!-- <div>
           <el-input
             v-model="stuId"
             clearable
@@ -14,17 +25,7 @@
           >
             <el-button slot="append" icon="el-icon-search" @click="getList()" />
           </el-input>
-        </div>
-      </div>
-      <div class="head-button">
-        <div>
-          <el-button type="primary" @click="handleClick()">授课绑定</el-button>
-          <el-button type="danger" @click="delClick(selectIds)"
-            >批量删除</el-button
-          >
-          <el-button type="primary" @click="exportClick()">导出</el-button>
-        </div>
-        <div class="right"></div>
+        </div> -->
       </div>
     </div>
     <el-table

@@ -2,7 +2,7 @@
   <div class="app-container user-message">
     <div>
       <div class="flex">
-        <div>
+        <!-- <div>
           <el-input
             v-model="teacherId"
             clearable
@@ -11,7 +11,7 @@
           >
             <el-button slot="append" icon="el-icon-search" @click="getList()" />
           </el-input>
-        </div>
+        </div> -->
         <div>
           <el-button type="primary" @click="handleClick()">新增教师</el-button>
           <el-button type="danger" @click="delClick(selectIds)"
@@ -152,6 +152,7 @@ export default {
   .flex {
     display: flex;
     justify-content: space-between;
+    flex-direction: row-reverse;
   }
   .head-button {
     display: flex;

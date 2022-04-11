@@ -61,13 +61,13 @@
       <el-table-column prop="experimentScore" sortable label="实验成绩" />
       <el-table-column prop="otherScore" sortable label="其他成绩" />
       <el-table-column prop="totalScore" sortable label="总成绩" />
-      <el-table-column fixed="right" label="操作" width="100">
+      <!-- <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="handleClick(scope.row)"
             >成绩详情</el-button
           >
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <el-pagination
       :current-page="pageInit.pageNum"

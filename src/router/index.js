@@ -173,7 +173,7 @@ export const constantRoutes = [
   {
     path: '/student',
     redirect: 'dep-manage',
-    meta: { title: '配置管理', icon: 'form', type: 0 },
+    meta: { title: '院系配置管理', icon: 'form', type: 0 },
     component: Layout,
     children: [
       {
