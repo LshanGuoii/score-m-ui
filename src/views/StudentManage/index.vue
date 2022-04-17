@@ -10,7 +10,7 @@
             v-model="stuId"
             clearable
             placeholder="请输入学号"
-            style="width: 340px"
+            style="width: 220px"
           >
             <el-button slot="append" icon="el-icon-search" @click="getList()" />
           </el-input>
@@ -31,21 +31,22 @@
           >
           <el-button type="primary" @click="exportClick()">导出</el-button>
 
-          <el-dialog title="上传" :visible.sync="dialogVisible" width="70%">
+          <el-dialog title="导入" :visible.sync="dialogVisible" width="70%">
             <el-upload
               class="upload-demo"
               drag
               action="/student/importData"
               multiple
               :headers="headers"
+              :on-success="success"
             >
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">
                 将文件拖到此处，或<em>点击上传</em>
               </div>
-              <div class="el-upload__tip" slot="tip">
+              <!-- <div class="el-upload__tip" slot="tip">
                 只能上传jpg/png文件，且不超过500kb
-              </div>
+              </div> -->
             </el-upload>
             <span slot="footer" class="dialog-footer">
               <el-button @click="dialogVisible = false">取 消</el-button>
@@ -166,6 +167,12 @@ export default {
         this.loading = false;
       });
     },
+    success() {
+      this.$message({
+        type: "success",
+        message: "导入成功!",
+      });
+    },
     handleClick(item) {
       console.log("[ item ]-143", item);
       this.studentMessage = item || {};
@@ -174,7 +181,7 @@ export default {
     },
     delClick(val) {
       val = val.length ? val : [val];
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该学生, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -235,6 +242,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .user-message {
+  .upload-demo {
+    text-align: center;
+  }
   .flex {
     display: flex;
     justify-content: space-between;

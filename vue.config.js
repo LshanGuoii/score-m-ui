@@ -8,7 +8,7 @@ function resolve(dir) {
 
 const name = defaultSettings.title || 'vue Admin Template' // page title
 const proxyBaseUrl = 'http://izx9j3im.dnat.tech:34420'
-// const proxyBaseUrl = 'http://192.168.0.102'
+// const proxyBaseUrl = 'http://localhost/:9000'
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.

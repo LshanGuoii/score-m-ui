@@ -71,6 +71,58 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/student',
+    redirect: 'dep-manage',
+    meta: { title: '院系配置管理', icon: 'table', type: 0 },
+    component: Layout,
+    children: [
+      {
+        path: '/dep-manage',
+        name: 'DepManage',
+        component: () => import('@/views/DepManage'),
+        meta: { title: '系部', icon: 'form' }
+      },
+      {
+        path: '/specialize-manage',
+        name: 'SpecializeManage',
+        component: () => import('@/views/SpecializeManage'),
+        meta: { title: '专业', icon: 'form' }
+      },
+      {
+        path: '/class-manage',
+        name: 'ClassManage',
+        component: () => import('@/views/ClassManage'),
+        meta: { title: '班级', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/teacher-manage',
+    component: Layout,
+    meta: { type: 0 },
+    children: [
+      {
+        path: '/teacher-manage',
+        name: 'TeacherManage',
+        component: () => import('@/views/TeacherManage'),
+        meta: { title: '教师管理', icon: 'eye', }
+      }
+    ]
+  },
+  {
+    path: '/student-manage',
+    component: Layout,
+    meta: { type: 0 },
+    children: [
+      {
+        path: '/student-manage',
+        name: 'StudentManage',
+        component: () => import('@/views/StudentManage'),
+        meta: { title: '学生管理', icon: 'password', }
+      }
+    ]
+  },
+  {
     path: '/tiny-info',
     component: Layout,
     meta: { type: 2 },
@@ -148,58 +200,8 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: '/teacher-manage',
-    component: Layout,
-    meta: { type: 0 },
-    children: [
-      {
-        path: '/teacher-manage',
-        name: 'TeacherManage',
-        component: () => import('@/views/TeacherManage'),
-        meta: { title: '教师管理', icon: 'eye', }
-      }
-    ]
-  },
-  {
-    path: '/student-manage',
-    component: Layout,
-    meta: { type: 0 },
-    children: [
-      {
-        path: '/student-manage',
-        name: 'StudentManage',
-        component: () => import('@/views/StudentManage'),
-        meta: { title: '学生管理', icon: 'password', }
-      }
-    ]
-  },
-  {
-    path: '/student',
-    redirect: 'dep-manage',
-    meta: { title: '院系配置管理', icon: 'table', type: 0 },
-    component: Layout,
-    children: [
-      {
-        path: '/dep-manage',
-        name: 'DepManage',
-        component: () => import('@/views/DepManage'),
-        meta: { title: '系部', icon: 'form' }
-      },
-      {
-        path: '/specialize-manage',
-        name: 'SpecializeManage',
-        component: () => import('@/views/SpecializeManage'),
-        meta: { title: '专业', icon: 'form' }
-      },
-      {
-        path: '/class-manage',
-        name: 'ClassManage',
-        component: () => import('@/views/ClassManage'),
-        meta: { title: '班级', icon: 'form' }
-      }
-    ]
-  },
+
+
 
   {
     path: '/log-manage',

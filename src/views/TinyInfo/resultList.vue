@@ -36,7 +36,7 @@
             v-model="stuId"
             clearable
             placeholder="请输入学号"
-            style="width: 340px"
+            style="width: 220px"
           >
             <el-button slot="append" icon="el-icon-search" @click="getList()" />
           </el-input>
