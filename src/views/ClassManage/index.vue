@@ -25,6 +25,7 @@
                 v-model="tableFilter.specializeId"
                 placeholder="请选择专业"
                 clearable
+                @change="getList"
               >
                 <el-option
                   v-for="(item, index) in speList"
@@ -185,6 +186,7 @@ export default {
       this.selectIds = val.map((item) => item.id);
     },
     selectDepChange(value) {
+      this.getList();
       this.tableFilter.specializeId = null;
       if (!value) {
         this.speList = [];

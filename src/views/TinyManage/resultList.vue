@@ -37,18 +37,14 @@
             <el-button type="primary" @click="exportClick()">导出</el-button>
           </div>
           <div style="margin-right: 10px">
-            <el-popover
-              placement="bottom-end"
-              title="标题"
-              width="500"
-              trigger="hover"
-            >
+            <el-popover placement="bottom-end" title="标题" trigger="click">
               <barChart
                 ref="exam-bar-echart"
                 name="exam-bar-echart"
                 class="echart"
                 :option="optionRevenueBar"
               />
+              <div>ss</div>
               <el-button slot="reference" type="primary" @click=""
                 >查看分段统计</el-button
               >
@@ -144,7 +140,7 @@ import barChart from "./../dashboard/barChart.vue";
 export default {
   name: "TinyManage",
 
-  components: { From },
+  components: { From, barChart },
   data() {
     return {
       showDialog: false,
@@ -154,7 +150,15 @@ export default {
         entered: null,
       },
       tableData: [],
-      optionRevenueBar: {},
+      optionRevenueBar: {
+        serieData: { datas: [], xaxis: [] },
+        // serieData: res,
+
+        showLegend: false,
+        type: "bar",
+        // subTitle: '单位（场）',
+        color: "#497EFF",
+      },
       selectIds: [],
     };
   },
@@ -162,11 +166,12 @@ export default {
   created() {
     console.log("[ this.$router ]-143", this.$route);
     this.getList();
-    this.echartData();
   },
   mounted() {},
   methods: {
     getList() {
+      this.echartData();
+
       const { classId, courseId } = this.$route.query;
       console.log("[ this.$route.query ]-159", this.$route.query);
 
@@ -220,10 +225,17 @@ export default {
       const { courseId } = this.$route.query;
       api.getSelectNumByCourseId(courseId).then((res) => {
         console.log("[ res ]-121", res);
+        let list = { datas: [], xaxis: [] };
+
+        res.data.forEach((item) => {
+          list.datas.push(item.value);
+          list.xaxis.push(item.name);
+        });
+        console.log("[ list ]-224", list);
         this.optionRevenueBar = {
           // title: `测试sdas`,
-          // serieData: { datas: [], xaxis: [] },
-          serieData: res,
+          serieData: { datas: list.datas, xaxis: list.xaxis },
+          // serieData: res,
 
           showLegend: false,
           type: "bar",
@@ -236,16 +248,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.user-message {
-  .echart {
-    width: 100%;
-    height: 300px;
+.echart {
+  width: 100%;
+  width: 500px;
+  height: 300px;
 
-    &.noTab {
-      width: 100%;
-      height: 360px;
-    }
+  &.noTab {
+    width: 100%;
+    height: 360px;
   }
+}
+.user-message {
   .flex {
     display: flex;
     justify-content: space-between;

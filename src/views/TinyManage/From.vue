@@ -145,6 +145,24 @@ export default {
       this.$refs[formName].resetFields();
     },
     enterResultClick() {
+      if (this.totalScore > 100)
+        return this.$message({
+          type: "warning",
+          message: `分数不能超过100！`,
+        });
+      if (
+        !(
+          this.stuForm.attendScore &&
+          this.stuForm.taskScore &&
+          this.stuForm.experimentScore &&
+          this.stuForm.otherScore
+        )
+      ) {
+        return this.$message({
+          type: "warning",
+          message: `请填写完整分数`,
+        });
+      }
       let params = {
         ...this.stuForm,
         totalScore: this.totalScore,

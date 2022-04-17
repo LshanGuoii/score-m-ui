@@ -41,12 +41,13 @@ export function getReset(data) {
   })
 }
 export function getUpdata(data) {
+  console.log('[ data ]-44', data)
   return request({
-    url: '/user/updata',
+    url: '/user/update',
     method: 'post',
     data,
-    // headers: {
-    //   'Content-Type': 'application/json; charset=utf-8'
-    // }
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    }
   })
 }

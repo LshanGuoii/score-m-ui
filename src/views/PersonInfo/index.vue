@@ -13,12 +13,7 @@
           <!-- <img :src="imageUrl" class="avatar" /> -->
           <span v-if="!imageUrl"> 头像：</span>
 
-          <el-avatar
-            :size="size"
-            v-if="imageUrl"
-            :src="imageUrl"
-            class="avatar"
-          ></el-avatar>
+          <el-avatar v-if="imageUrl" :src="imageUrl" class="avatar"></el-avatar>
 
           <div v-else style="display: inline-block">
             <el-button size="small" type="primary">点击上传</el-button>
@@ -248,6 +243,10 @@ export default {
     resetPassword() {
       console.log("[ this.userInfo ]-219", this.userInfo);
       api.getReset(this.userInfo.username).then((res) => {
+        this.$message({
+          type: "success",
+          message: "重置成功!",
+        });
         console.log("[ res ]-123", res);
       });
     },
@@ -256,7 +255,15 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.updataPassword = true;
-          api.getUpdata(this.ruleForm.pass).then((res) => {});
+          const password = this.ruleForm.pass + "";
+          api.getUpdata(password).then((res) => {
+            console.log("[ res ]-256", res);
+            this.updataPassword = false;
+            this.$message({
+              type: "success",
+              message: "更新成功!",
+            });
+          });
         } else {
           console.log("error submit!!");
           return false;

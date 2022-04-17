@@ -2,16 +2,6 @@
   <div class="app-container user-message">
     <div>
       <div class="flex">
-        <!-- <div>
-          <el-input
-            v-model="teacherId"
-            clearable
-            placeholder="请输入学号"
-            style="width: 340px"
-          >
-            <el-button slot="append" icon="el-icon-search" @click="getList()" />
-          </el-input>
-        </div> -->
         <div>
           <el-button type="primary" @click="handleClick()">新增教师</el-button>
           <el-button type="danger" @click="delClick(selectIds)"

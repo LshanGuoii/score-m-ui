@@ -2,7 +2,7 @@
   <div class="app-container user-message">
     <div>
       <div class="flex">
-        <ClassTreeFilter @update="tableFilterUpdate" />
+        <ClassTreeFilter class="class-filter" @update="tableFilterUpdate" />
         <div class="head-button">
           <div>
             <el-button type="primary" @click="handleClick()"
@@ -15,17 +15,6 @@
           </div>
           <div class="right"></div>
         </div>
-
-        <!-- <div>
-          <el-input
-            v-model="stuId"
-            clearable
-            placeholder="请输入学号"
-            style="width: 340px"
-          >
-            <el-button slot="append" icon="el-icon-search" @click="getList()" />
-          </el-input>
-        </div> -->
       </div>
     </div>
     <el-table
@@ -179,6 +168,9 @@ export default {
   .flex {
     display: flex;
     justify-content: space-between;
+    .class-filter {
+      flex: 1;
+    }
   }
   .head-button {
     display: flex;

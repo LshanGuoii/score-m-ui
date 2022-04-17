@@ -32,6 +32,10 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [
+  // {
+  //   path: '/',
+  //   redirect: '/login',
+  // },
   {
     path: '/login',
 
@@ -126,7 +130,7 @@ export const constantRoutes = [
         path: '/course-manage',
         name: 'CourseManage',
         component: () => import('@/views/CourseManage'),
-        meta: { title: '课程管理', icon: 'form' }
+        meta: { title: '课程管理', icon: 'link' }
       }
     ]
   },
@@ -139,7 +143,7 @@ export const constantRoutes = [
         path: '/teaching-manage',
         name: 'TeachingManage',
         component: () => import('@/views/TeachingManage'),
-        meta: { title: '授课管理', icon: 'form', }
+        meta: { title: '授课管理', icon: 'nested', }
       }
     ]
   },
@@ -153,7 +157,7 @@ export const constantRoutes = [
         path: '/teacher-manage',
         name: 'TeacherManage',
         component: () => import('@/views/TeacherManage'),
-        meta: { title: '教师管理', icon: 'form', }
+        meta: { title: '教师管理', icon: 'eye', }
       }
     ]
   },
@@ -166,14 +170,14 @@ export const constantRoutes = [
         path: '/student-manage',
         name: 'StudentManage',
         component: () => import('@/views/StudentManage'),
-        meta: { title: '学生管理', icon: 'form', }
+        meta: { title: '学生管理', icon: 'password', }
       }
     ]
   },
   {
     path: '/student',
     redirect: 'dep-manage',
-    meta: { title: '院系配置管理', icon: 'form', type: 0 },
+    meta: { title: '院系配置管理', icon: 'table', type: 0 },
     component: Layout,
     children: [
       {
@@ -196,118 +200,7 @@ export const constantRoutes = [
       }
     ]
   },
-  // {
-  //   path: '/nested',
-  //   component: Layout,
-  //   redirect: '/nested/menu1',
-  //   name: 'Nested',
-  //   meta: {
-  //     title: 'Nested',
-  //     icon: 'nested'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'menu1',
-  //       component: () => import('@/views/nested/menu1/index'), // Parent router-view
-  //       name: 'Menu1',
-  //       meta: { title: 'Menu1' },
-  //       children: [
-  //         {
-  //           path: 'menu1-1',
-  //           component: () => import('@/views/nested/menu1/menu1-1'),
-  //           name: 'Menu1-1',
-  //           meta: { title: 'Menu1-1' }
-  //         },
-  //         {
-  //           path: 'menu1-2',
-  //           component: () => import('@/views/nested/menu1/menu1-2'),
-  //           name: 'Menu1-2',
-  //           meta: { title: 'Menu1-2' },
-  //           children: [
-  //             {
-  //               path: 'menu1-2-1',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-  //               name: 'Menu1-2-1',
-  //               meta: { title: 'Menu1-2-1' }
-  //             },
-  //             {
-  //               path: 'menu1-2-2',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-  //               name: 'Menu1-2-2',
-  //               meta: { title: 'Menu1-2-2' }
-  //             }
-  //           ]
-  //         },
-  //         {
-  //           path: 'menu1-3',
-  //           component: () => import('@/views/nested/menu1/menu1-3'),
-  //           name: 'Menu1-3',
-  //           meta: { title: 'Menu1-3' }
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: 'menu2',
-  //       component: () => import('@/views/nested/menu2/index'),
-  //       name: 'Menu2',
-  //       meta: { title: 'menu2' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/pdf',
-  //   component: Layout,
-  //   redirect: '/pdf/index',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/pdf/index'),
-  //       name: 'PDF',
-  //       meta: { title: 'PDF', icon: 'pdf' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/pdf/download',
-  //   component: () => import('@/views/pdf/download'),
-  //   hidden: true
-  // },
-  // {
-  //   path: '/excel',
-  //   component: Layout,
-  //   redirect: '/excel/export-excel',
-  //   name: 'Excel',
-  //   meta: {
-  //     title: 'Excel',
-  //     icon: 'excel'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'export-excel',
-  //       component: () => import('@/views/excel/export-excel'),
-  //       name: 'ExportExcel',
-  //       meta: { title: 'Export Excel' }
-  //     },
-  //     {
-  //       path: 'export-selected-excel',
-  //       component: () => import('@/views/excel/select-excel'),
-  //       name: 'SelectExcel',
-  //       meta: { title: 'Export Selected' }
-  //     },
-  //     {
-  //       path: 'export-merge-header',
-  //       component: () => import('@/views/excel/merge-header'),
-  //       name: 'MergeHeader',
-  //       meta: { title: 'Merge Header' }
-  //     },
-  //     {
-  //       path: 'upload-excel',
-  //       component: () => import('@/views/excel/upload-excel'),
-  //       name: 'UploadExcel',
-  //       meta: { title: 'Upload Excel' }
-  //     }
-  //   ]
-  // },
+
   {
     path: '/log-manage',
     component: Layout,
@@ -316,7 +209,7 @@ export const constantRoutes = [
       path: '/log-manage',
       name: 'LogManage',
       component: () => import('@/views/LogManage'),
-      meta: { title: '日志管理', icon: 'dashboard' }
+      meta: { title: '日志管理', icon: 'tree' }
     }]
   },
   // 404 page must be placed at the end !!!

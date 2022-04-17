@@ -15,6 +15,7 @@
                 v-model="tableFilter.departmentId"
                 placeholder="请选择系部"
                 clearable
+                @change="getList()"
               >
                 <el-option
                   v-for="(item, index) in depList"

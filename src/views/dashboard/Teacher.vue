@@ -12,9 +12,9 @@
     </div>
     <div class="situation-content">
       <div class="content-exam">
-        <div class="content-title" style="margin-bottom: 8px">
+        <!-- <div class="content-title" style="margin-bottom: 8px">
           下午好~ {{ userInfo.name }}
-        </div>
+        </div> -->
         <div></div>
       </div>
 
